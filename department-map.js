@@ -87,7 +87,7 @@ const timers = [];
 
 function hasSeenLoading() {
   try {
-    return window.localStorage.getItem(loadingSeenKey) === "true";
+    return window.sessionStorage.getItem(loadingSeenKey) === "true";
   } catch (error) {
     return false;
   }
@@ -95,7 +95,7 @@ function hasSeenLoading() {
 
 function markLoadingSeen() {
   try {
-    window.localStorage.setItem(loadingSeenKey, "true");
+    window.sessionStorage.setItem(loadingSeenKey, "true");
   } catch (error) {
     // Storage can be unavailable in private contexts; the page still works.
   }
