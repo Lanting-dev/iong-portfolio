@@ -2,27 +2,48 @@ const departments = {
   mete: {
     label: "METE SYSTEMS",
     restricted: false,
-    route: "index.html"
+    route: "index.html",
+    subtitle: "Surplus to sustenance",
+    description:
+      "Mete Systems collects and processes nutritional materials into daily sachets. It reduces waste and meets safety standards. The exact composition is not shared, and most processes are not visible to the public.",
+    image: "assets/department-overlay-mete.png",
+    imageClass: "is-mete"
   },
   wel: {
     label: "WĒL OUTREACH",
     restricted: false,
-    route: "#wel"
+    route: "#wel",
+    subtitle: "Trust and communication",
+    description:
+      "Wēl Outreach connects citizens to the program. It explains the Health Credit Score, shares updates, and supports participation. It serves as the main link between citizens and the system.",
+    image: "assets/department-overlay-wel.png",
+    imageClass: "is-wel"
   },
   lic: {
     label: "LÍC ANALYTICS",
     restricted: true,
-    subtitle: "Data processing"
+    subtitle: "Data processing",
+    description:
+      "Líc Analytics processes classified behavioral, nutritional, and biometric datasets. Public access is restricted and operational details are only visible at elevated clearance levels.",
+    imageClass: "is-locked"
   },
   lif: {
     label: "LIF CONTINUITY",
     restricted: true,
-    subtitle: "Population monitoring"
+    subtitle: "Population monitoring",
+    description:
+      "Lif Continuity monitors long-term population stability through restricted forecasting systems. Access requires authorization beyond employee-level browsing.",
+    imageClass: "is-locked"
   },
   hael: {
     label: "HÆL INTELLIGENCE",
     restricted: false,
-    route: "hael-intelligence.html"
+    route: "hael-intelligence.html",
+    subtitle: "Biometric data analysis",
+    description:
+      "HÆL Intelligence uses biometric data to create daily nutrition plans. It collects data in real time from wearable devices and turns it into formulas. The system updates regularly to improve accuracy. Access is controlled, and personal data is not shared across departments.",
+    image: "assets/department-overlay-hael.png",
+    imageClass: "is-hael"
   }
 };
 
@@ -40,6 +61,13 @@ const overlay = document.querySelector("[data-restricted]");
 const dismissButton = document.querySelector("[data-dismiss]");
 const restrictedTitle = document.querySelector("[data-restricted-title]");
 const restrictedSubtitle = document.querySelector("[data-restricted-subtitle]");
+const departmentDetail = document.querySelector("[data-department-detail]");
+const detailTitle = document.querySelector("[data-detail-title]");
+const detailSubtitle = document.querySelector("[data-detail-subtitle]");
+const detailCopy = document.querySelector("[data-detail-copy]");
+const detailImage = document.querySelector("[data-detail-image]");
+const detailMedia = document.querySelector("[data-detail-media]");
+const detailLock = document.querySelector("[data-detail-lock]");
 
 function pentagonPoints(radius) {
   return Array.from({ length: 5 }, (_, index) => {
@@ -101,7 +129,32 @@ function startLoading() {
 
 startLoading();
 
+function openDepartmentDetail(department) {
+  detailTitle.textContent = department.label;
+  detailSubtitle.textContent = department.subtitle || "Department overview";
+  detailCopy.textContent = department.description || "";
+  detailMedia.className = `department-detail-media ${department.imageClass || ""}`;
+
+  if (department.restricted) {
+    detailImage.hidden = true;
+    detailLock.hidden = false;
+  } else {
+    detailImage.hidden = false;
+    detailLock.hidden = true;
+    detailImage.src = department.image;
+  }
+
+  departmentDetail.classList.add("is-open");
+  departmentDetail.setAttribute("aria-hidden", "false");
+}
+
+function closeDepartmentDetail() {
+  departmentDetail.classList.remove("is-open");
+  departmentDetail.setAttribute("aria-hidden", "true");
+}
+
 function openRestricted(department) {
+  closeDepartmentDetail();
   restrictedTitle.textContent = department.label;
   restrictedSubtitle.textContent = department.subtitle || "Restricted department";
   overlay.hidden = false;
@@ -116,6 +169,23 @@ function closeRestricted() {
 }
 
 document.querySelectorAll("[data-dept]").forEach((button) => {
+  function handleDepartmentEnter() {
+    const department = departments[button.dataset.dept];
+    if (!button.classList.contains("is-ready")) return;
+    if (department.restricted) {
+      closeDepartmentDetail();
+      return;
+    }
+    openDepartmentDetail(department);
+  }
+
+  button.addEventListener("pointerenter", handleDepartmentEnter);
+  button.addEventListener("mouseenter", handleDepartmentEnter);
+  button.addEventListener("focus", handleDepartmentEnter);
+  button.addEventListener("pointerleave", closeDepartmentDetail);
+  button.addEventListener("mouseleave", closeDepartmentDetail);
+  button.addEventListener("blur", closeDepartmentDetail);
+
   button.addEventListener("click", () => {
     const department = departments[button.dataset.dept];
     if (!button.classList.contains("is-ready")) return;
@@ -142,6 +212,7 @@ stage.addEventListener("mousemove", (event) => {
 stage.addEventListener("mouseleave", () => {
   stage.style.setProperty("--tilt-x", "0deg");
   stage.style.setProperty("--tilt-y", "0deg");
+  closeDepartmentDetail();
 });
 
 overlay.addEventListener("click", closeRestricted);

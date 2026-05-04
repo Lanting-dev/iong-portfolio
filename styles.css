@@ -34,7 +34,7 @@ img {
 
 .scroll-scene {
   position: relative;
-  height: 760vh;
+  height: 1280vh;
   background: var(--background);
 }
 
@@ -115,6 +115,7 @@ img {
   gap: 8px;
   width: 100%;
   transform: translateX(-50%);
+  will-change: opacity, transform;
 }
 
 .page-title-row {
@@ -304,6 +305,237 @@ img {
   width: var(--intro-two-line-width, 409px);
   height: var(--intro-two-line-height, 11px);
   transform: translateY(-50%) rotate(180deg) scaleY(-1);
+}
+
+.protein-kicker,
+.protein-title {
+  position: absolute;
+  left: 50%;
+  z-index: 1;
+  width: var(--protein-heading-width, 1680px);
+  margin: 0;
+  color: var(--secondary);
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translateX(-50%) translateY(var(--stagger-y, 10px));
+  will-change: opacity, transform;
+}
+
+.protein-kicker {
+  top: var(--protein-kicker-top, 128.5px);
+  font-family: Orbitron, sans-serif;
+  font-size: var(--intro-h3-size, 16px);
+  font-weight: 400;
+  letter-spacing: var(--intro-h3-spacing, 2px);
+}
+
+.protein-title {
+  top: var(--protein-title-top, 190.5px);
+  font-family: Orbitron, sans-serif;
+  font-size: var(--intro-h2-size, 24px);
+  font-weight: 500;
+  letter-spacing: var(--intro-h2-spacing, 3px);
+}
+
+.protein-intro-group {
+  position: absolute;
+  left: var(--protein-group-left, 130.5px);
+  top: var(--protein-group-top, 398.5px);
+  display: flex;
+  align-items: center;
+  gap: var(--protein-group-gap, 24px);
+  width: var(--protein-group-width, 1659px);
+  height: var(--protein-group-height, 423px);
+  transform: translate3d(var(--intro-x, 0px), 0, 0);
+  will-change: transform;
+}
+
+.protein-intro-image {
+  position: relative;
+  flex: 0 0 var(--intro-image-width, 736px);
+  width: var(--intro-image-width, 736px);
+  height: var(--intro-image-height, 423px);
+  overflow: hidden;
+}
+
+.protein-intro-image img {
+  position: absolute;
+  left: -39.54%;
+  top: -66.84%;
+  width: 139.54%;
+  height: 182.09%;
+  max-width: none;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.protein-benefits {
+  flex: 0 0 var(--protein-benefits-width, 899px);
+  width: var(--protein-benefits-width, 899px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--protein-benefits-gap, 42px);
+}
+
+.protein-benefit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--protein-benefit-gap, 39px);
+  width: 100%;
+  margin: 0;
+  opacity: 0;
+  transform: translate3d(0, var(--stagger-y, 10px), 0);
+  will-change: opacity, transform;
+}
+
+.protein-benefit img {
+  width: var(--protein-icon-size, 126px);
+  height: var(--protein-icon-size, 126px);
+  object-fit: cover;
+}
+
+.protein-benefit div {
+  width: var(--protein-benefit-copy-width, 734px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--protein-benefit-copy-gap, 19px);
+}
+
+.protein-benefit h3,
+.protein-benefit p {
+  margin: 0;
+  color: var(--secondary);
+  font-size: var(--intro-body-size, 16px);
+  line-height: 1;
+  letter-spacing: var(--intro-body-spacing, 2px);
+}
+
+.protein-benefit h3 {
+  font-family: Orbitron, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.substrate-kicker,
+.substrate-title {
+  position: absolute;
+  left: 50%;
+  z-index: 1;
+  width: var(--detail-heading-width, 1680px);
+  margin: 0;
+  color: var(--secondary);
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translateX(-50%) translateY(var(--stagger-y, 10px));
+  will-change: opacity, transform;
+}
+
+.substrate-kicker {
+  top: var(--detail-kicker-top, 261px);
+  font-family: Orbitron, sans-serif;
+  font-size: var(--intro-h3-size, 16px);
+  font-weight: 400;
+  letter-spacing: var(--intro-h3-spacing, 2px);
+}
+
+.substrate-title {
+  top: var(--detail-title-top, 323px);
+  font-family: Orbitron, sans-serif;
+  font-size: var(--intro-h2-size, 24px);
+  font-weight: 500;
+  letter-spacing: var(--intro-h2-spacing, 3px);
+}
+
+.substrate-detail-group {
+  position: absolute;
+  left: var(--detail-group-left, 130.5px);
+  top: var(--detail-group-top, 526.5px);
+  display: flex;
+  align-items: center;
+  gap: var(--protein-group-gap, 24px);
+  width: var(--protein-group-width, 1659px);
+  height: var(--detail-group-height, 432px);
+  transform: translate3d(var(--intro-x, 0px), 0, 0);
+  will-change: transform;
+}
+
+.substrate-benefits {
+  flex: 0 0 var(--protein-benefits-width, 899px);
+  width: var(--protein-benefits-width, 899px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--protein-benefits-gap, 42px);
+}
+
+.substrate-benefit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--protein-benefit-gap, 39px);
+  width: 100%;
+  margin: 0;
+  opacity: 0;
+  transform: translate3d(0, var(--stagger-y, 10px), 0);
+  will-change: opacity, transform;
+}
+
+.substrate-benefit-muted img {
+  opacity: 0.8;
+}
+
+.substrate-benefit img {
+  width: var(--protein-icon-size, 126px);
+  height: var(--protein-icon-size, 126px);
+  object-fit: cover;
+}
+
+.substrate-benefit div {
+  width: var(--protein-benefit-copy-width, 734px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--protein-benefit-copy-gap, 19px);
+}
+
+.substrate-benefit h3,
+.substrate-benefit p {
+  margin: 0;
+  color: var(--secondary);
+  font-size: var(--intro-body-size, 16px);
+  line-height: 1;
+  letter-spacing: var(--intro-body-spacing, 2px);
+}
+
+.substrate-benefit h3 {
+  font-family: Orbitron, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.substrate-detail-image {
+  position: relative;
+  flex: 0 0 var(--intro-image-width, 736px);
+  width: var(--intro-image-width, 736px);
+  height: var(--detail-image-height, 432px);
+  overflow: hidden;
+}
+
+.substrate-detail-image img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.substrate-detail-image-two img {
+  position: absolute;
+  left: -22.91%;
+  top: -51.11%;
+  width: 137.06%;
+  height: 175.13%;
 }
 
 .intro-three-group {
