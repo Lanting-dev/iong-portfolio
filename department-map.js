@@ -57,6 +57,7 @@ const centerY = 310;
 const stage = document.querySelector("[data-map-stage]");
 const page = document.querySelector(".department-page");
 const loadingOverlay = document.querySelector("[data-loading]");
+const loadingMark = document.querySelector(".loading-mark");
 const loadingPercent = document.querySelector("[data-loading-percent]");
 const overlay = document.querySelector("[data-restricted]");
 const dismissButton = document.querySelector("[data-dismiss]");
@@ -114,9 +115,24 @@ function startDepartmentReveal(baseDelay = postLoadingDelay) {
   });
 }
 
+function prepareLoadingMorph() {
+  const stageRect = stage.getBoundingClientRect();
+  const markRect = loadingMark.getBoundingClientRect();
+  const markShapeWidth = markRect.width * 0.951;
+  const mapPentagonWidth = stageRect.width * (480 / 900);
+  const finalScale = mapPentagonWidth / markShapeWidth;
+  const finalX = stageRect.left + stageRect.width / 2 - (markRect.left + markRect.width / 2);
+  const finalY = stageRect.top + stageRect.height / 2 - (markRect.top + markRect.height / 2);
+
+  loadingOverlay.style.setProperty("--loading-final-x", `${finalX}px`);
+  loadingOverlay.style.setProperty("--loading-final-y", `${finalY}px`);
+  loadingOverlay.style.setProperty("--loading-final-scale", finalScale.toFixed(4));
+}
+
 function startLoading() {
-  const duration = 3600;
+  const duration = 5000;
   const completeHold = 120;
+  const morphDuration = 980;
   const start = performance.now();
   markLoadingSeen();
 
@@ -136,9 +152,14 @@ function startLoading() {
     }
 
     window.setTimeout(() => {
+      prepareLoadingMorph();
       page.classList.add("is-ready");
-      loadingOverlay.classList.add("is-done");
-      startDepartmentReveal();
+      loadingOverlay.classList.add("is-morph");
+      startDepartmentReveal(700);
+
+      window.setTimeout(() => {
+        loadingOverlay.classList.add("is-done");
+      }, morphDuration);
     }, completeHold);
   }
 
