@@ -169,7 +169,7 @@ img {
   margin: 0;
   color: var(--primary);
   font-family: Orbitron, sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   line-height: 1;
   letter-spacing: 2px;
@@ -178,8 +178,9 @@ img {
 }
 
 .scroll-indicator img {
-  width: 30px;
-  height: 30px;
+  width: 16px;
+  height: 9px;
+  transform: scaleY(-1);
   animation: scroll-indicator-pulse 1400ms ease-in-out infinite;
 }
 
@@ -620,12 +621,12 @@ img {
   0%,
   100% {
     opacity: 0.55;
-    transform: translateY(0);
+    transform: translateY(0) scaleY(-1);
   }
 
   50% {
     opacity: 1;
-    transform: translateY(5px);
+    transform: translateY(5px) scaleY(-1);
   }
 }
 

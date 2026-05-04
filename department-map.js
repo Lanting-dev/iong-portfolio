@@ -2,7 +2,7 @@ const departments = {
   mete: {
     label: "METE SYSTEMS",
     restricted: false,
-    route: "index.html",
+    route: "mete-system.html",
     subtitle: "Surplus to sustenance",
     description:
       "Mete Systems collects and processes nutritional materials into daily sachets. It reduces waste and meets safety standards. The exact composition is not shared, and most processes are not visible to the public.",
@@ -50,6 +50,7 @@ const departments = {
 const revealOrder = ["mete", "hael", "wel", "lif", "lic"];
 const deptStagger = 220;
 const postLoadingDelay = 760;
+const loadingSeenKey = "iongDepartmentLoadingSeen";
 const centerX = 450;
 const centerY = 310;
 
@@ -84,10 +85,26 @@ document.querySelectorAll("[data-radius]").forEach((polygon) => {
 
 const timers = [];
 
-function startDepartmentReveal() {
+function hasSeenLoading() {
+  try {
+    return window.localStorage.getItem(loadingSeenKey) === "true";
+  } catch (error) {
+    return false;
+  }
+}
+
+function markLoadingSeen() {
+  try {
+    window.localStorage.setItem(loadingSeenKey, "true");
+  } catch (error) {
+    // Storage can be unavailable in private contexts; the page still works.
+  }
+}
+
+function startDepartmentReveal(baseDelay = postLoadingDelay) {
   revealOrder.forEach((id, deptIndex) => {
     const button = document.querySelector(`[data-dept="${id}"]`);
-    const start = postLoadingDelay + deptIndex * deptStagger;
+    const start = baseDelay + deptIndex * deptStagger;
 
     timers.push(
       setTimeout(() => {
@@ -101,6 +118,7 @@ function startLoading() {
   const duration = 3600;
   const completeHold = 120;
   const start = performance.now();
+  markLoadingSeen();
 
   function update(now) {
     const progress = Math.min(1, (now - start) / duration);
@@ -127,7 +145,14 @@ function startLoading() {
   requestAnimationFrame(update);
 }
 
-startLoading();
+if (hasSeenLoading()) {
+  loadingOverlay.hidden = true;
+  loadingOverlay.classList.add("is-done");
+  page.classList.add("is-ready");
+  startDepartmentReveal(80);
+} else {
+  startLoading();
+}
 
 function openDepartmentDetail(department) {
   detailTitle.textContent = department.label;

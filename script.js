@@ -136,34 +136,34 @@ function updateMeteAnimation() {
   const distance = rect.height - window.innerHeight;
   const progress = distance > 0 ? clamp(-rect.top / distance) : 0;
 
-  const productY = transformRange(progress, [0, 0.16, 1], [-420, 0, 0]);
-  const productScale = transformRange(progress, [0, 0.16, 0.62, 0.78], [0.72, 1, 1, 0.74]);
-  const pageTitleOpacity = transformRange(progress, [0, 0.18, 0.28], [1, 1, 0]);
-  const pageTitleY = transformRange(progress, [0.18, 0.28], [0, -18]);
+  const productY = transformRange(progress, [0, 0.075, 1], [-420, 0, 0]);
+  const productScale = transformRange(progress, [0, 0.075, 0.45, 0.56], [0.72, 1, 1, 0.74]);
+  const pageTitleOpacity = transformRange(progress, [0, 0.1, 0.16], [1, 1, 0]);
+  const pageTitleY = transformRange(progress, [0.1, 0.16], [0, -18]);
   const scrollIndicatorOpacity = transformRange(progress, [0, 0.035, 0.075], [1, 1, 0]);
   const scrollIndicatorY = transformRange(progress, [0.035, 0.075], [0, 12]);
 
-  const capY = transformRange(progress, [0.34, 0.46, 0.68, 0.78], [0, 145, 240, 520]);
-  const capX = transformRange(progress, [0.34, 0.46, 0.68, 0.78], [0, -32, -82, 460]);
-  const capRotate = transformRange(progress, [0.34, 0.46, 0.68, 0.78], [0, -18, -34, 18]);
-  const capOpacity = transformRange(progress, [0, 0.339, 0.34, 0.76, 0.79], [0, 0, 1, 1, 0]);
+  const capY = transformRange(progress, [0.16, 0.24, 0.38, 0.46], [0, 145, 240, 520]);
+  const capX = transformRange(progress, [0.16, 0.24, 0.38, 0.46], [0, -32, -82, 460]);
+  const capRotate = transformRange(progress, [0.16, 0.24, 0.38, 0.46], [0, -18, -34, 18]);
+  const capOpacity = transformRange(progress, [0, 0.159, 0.16, 0.44, 0.47], [0, 0, 1, 1, 0]);
 
-  const closedOpacity = transformRange(progress, [0, 0.339, 0.34], [1, 1, 0]);
-  const openOpacity = transformRange(progress, [0, 0.339, 0.34, 0.76, 0.79], [0, 0, 1, 1, 0]);
-  const bottleRotate = transformRange(progress, [0.38, 0.64, 0.68, 0.78], [0, 9, 14, 24]);
-  const bottleX = transformRange(progress, [0.38, 0.68, 0.78], [0, 36, 520]);
-  const bottleY = transformRange(progress, [0.68, 0.78], [0, -360]);
+  const closedOpacity = transformRange(progress, [0, 0.159, 0.16], [1, 1, 0]);
+  const openOpacity = transformRange(progress, [0, 0.159, 0.16, 0.44, 0.47], [0, 0, 1, 1, 0]);
+  const bottleRotate = transformRange(progress, [0.2, 0.34, 0.38, 0.46], [0, 9, 14, 24]);
+  const bottleX = transformRange(progress, [0.2, 0.38, 0.46], [0, 36, 520]);
+  const bottleY = transformRange(progress, [0.38, 0.46], [0, -360]);
 
-  const subOpacity = transformRange(progress, [0.5, 0.6, 0.68, 0.72], [0, 1, 1, 0]);
-  const subY = transformRange(progress, [0.5, 0.64, 0.72, 1], [120, 260, 70, 70]);
-  const subX = transformRange(progress, [0.5, 0.64, 0.72, 1], [0, -20, -300, -300]);
-  const subScale = transformRange(progress, [0.5, 0.64, 0.72, 1], [0.34, 1.08, 2.35, 2.35]);
-  const subRotate = transformRange(progress, [0.5, 0.68], [-12, 0]);
+  const subOpacity = transformRange(progress, [0.28, 0.38, 0.52, 0.58], [0, 1, 1, 0]);
+  const subY = transformRange(progress, [0.28, 0.44, 0.58, 1], [120, 260, 70, 70]);
+  const subX = transformRange(progress, [0.28, 0.44, 0.58, 1], [0, -20, -300, -300]);
+  const subScale = transformRange(progress, [0.28, 0.44, 0.58, 1], [0.34, 1.08, 2.35, 2.35]);
+  const subRotate = transformRange(progress, [0.28, 0.52], [-12, 0]);
 
-  const introOpacity = transformRange(progress, [0.66, 0.705, 0.795, 0.835], [0, 1, 1, 0]);
-  const proteinImageOpacity = transformRange(progress, [0, 0.69, 0.72], [0, 0, 1]);
-  const introX = transformRange(progress, [0.66, 0.705, 0.795, 0.835], [-24, 0, 0, -20]);
-  const introTextProgress = transformRange(progress, [0.675, 0.785], [0, 1]);
+  const introOpacity = transformRange(progress, [0.53, 0.585, 0.725, 0.765], [0, 1, 1, 0]);
+  const proteinImageOpacity = transformRange(progress, [0, 0.57, 0.6], [0, 0, 1]);
+  const introX = transformRange(progress, [0.53, 0.585, 0.725, 0.765], [-24, 0, 0, -20]);
+  const introTextProgress = transformRange(progress, [0.55, 0.72], [0, 1]);
   const introTwoOpacity = transformRange(progress, [0.82, 0.865, 0.945, 0.975], [0, 1, 1, 0]);
   const introTwoX = transformRange(progress, [0.82, 0.865, 0.945, 0.975], [24, 0, 0, -20]);
   const introTwoTextProgress = transformRange(progress, [0.835, 0.94], [0, 1]);
