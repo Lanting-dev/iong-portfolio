@@ -6,6 +6,7 @@ const bottleOpen = document.querySelector('[data-animate="bottleOpen"]');
 const cap = document.querySelector('[data-animate="cap"]');
 const substrate = document.querySelector('[data-animate="substrate"]');
 const pageTitle = document.querySelector('[data-animate="pageTitle"]');
+const scrollIndicator = document.querySelector('[data-animate="scrollIndicator"]');
 const productIntro = document.querySelector('[data-animate="productIntro"]');
 const proteinIntroImage = document.querySelector(".protein-intro-image");
 const productIntroTwo = document.querySelector('[data-animate="productIntroTwo"]');
@@ -64,7 +65,6 @@ function setIntroFigmaScale(element, scale, introX, variant = "one") {
   const frameHeight = 1220 * scale;
   const frameLeft = (window.innerWidth - frameWidth) / 2;
   const frameTop = (window.innerHeight - frameHeight) / 2;
-  const proteinYOffset = variant === "one" ? 72 * scale : 0;
 
   const values = {
     "--intro-left": frameLeft + 252 * scale,
@@ -87,10 +87,10 @@ function setIntroFigmaScale(element, scale, introX, variant = "one") {
     "--intro-line-height": 11 * scale,
     "--intro-x": introX,
     "--protein-heading-width": 1680 * scale,
-    "--protein-kicker-top": frameTop + 128.5 * scale + proteinYOffset,
-    "--protein-title-top": frameTop + 190.5 * scale + proteinYOffset,
+    "--protein-kicker-top": frameTop + 261 * scale,
+    "--protein-title-top": frameTop + 323 * scale,
     "--protein-group-left": frameLeft + 130.5 * scale,
-    "--protein-group-top": frameTop + 398.5 * scale + proteinYOffset,
+    "--protein-group-top": frameTop + 526.5 * scale,
     "--protein-group-width": 1659 * scale,
     "--protein-group-height": 423 * scale,
     "--protein-group-gap": 24 * scale,
@@ -140,6 +140,8 @@ function updateMeteAnimation() {
   const productScale = transformRange(progress, [0, 0.16, 0.62, 0.78], [0.72, 1, 1, 0.74]);
   const pageTitleOpacity = transformRange(progress, [0, 0.18, 0.28], [1, 1, 0]);
   const pageTitleY = transformRange(progress, [0.18, 0.28], [0, -18]);
+  const scrollIndicatorOpacity = transformRange(progress, [0, 0.035, 0.075], [1, 1, 0]);
+  const scrollIndicatorY = transformRange(progress, [0.035, 0.075], [0, 12]);
 
   const capY = transformRange(progress, [0.34, 0.46, 0.68, 0.78], [0, 145, 240, 520]);
   const capX = transformRange(progress, [0.34, 0.46, 0.68, 0.78], [0, -32, -82, 460]);
@@ -152,27 +154,29 @@ function updateMeteAnimation() {
   const bottleX = transformRange(progress, [0.38, 0.68, 0.78], [0, 36, 520]);
   const bottleY = transformRange(progress, [0.68, 0.78], [0, -360]);
 
-  const subOpacity = transformRange(progress, [0.5, 0.62, 0.735, 0.765], [0, 1, 1, 0]);
-  const subY = transformRange(progress, [0.5, 0.68, 0.765, 1], [120, 260, 70, 70]);
-  const subX = transformRange(progress, [0.5, 0.68, 0.765, 1], [0, -20, -300, -300]);
-  const subScale = transformRange(progress, [0.5, 0.68, 0.765, 1], [0.34, 1.08, 2.35, 2.35]);
-  const subRotate = transformRange(progress, [0.5, 0.72], [-12, 0]);
+  const subOpacity = transformRange(progress, [0.5, 0.6, 0.68, 0.72], [0, 1, 1, 0]);
+  const subY = transformRange(progress, [0.5, 0.64, 0.72, 1], [120, 260, 70, 70]);
+  const subX = transformRange(progress, [0.5, 0.64, 0.72, 1], [0, -20, -300, -300]);
+  const subScale = transformRange(progress, [0.5, 0.64, 0.72, 1], [0.34, 1.08, 2.35, 2.35]);
+  const subRotate = transformRange(progress, [0.5, 0.68], [-12, 0]);
 
-  const introOpacity = transformRange(progress, [0.7, 0.76, 0.84, 0.89], [0, 1, 1, 0]);
-  const proteinImageOpacity = transformRange(progress, [0, 0.758, 0.79], [0, 0, 1]);
-  const introX = transformRange(progress, [0.7, 0.76, 0.84, 0.89], [-24, 0, 0, -20]);
-  const introTextProgress = transformRange(progress, [0.72, 0.83], [0, 1]);
-  const introTwoOpacity = transformRange(progress, [0.86, 0.91, 0.95, 0.98], [0, 1, 1, 0]);
-  const introTwoX = transformRange(progress, [0.86, 0.91, 0.95, 0.98], [24, 0, 0, -20]);
-  const introTwoTextProgress = transformRange(progress, [0.88, 0.96], [0, 1]);
-  const introThreeOpacity = transformRange(progress, [0.96, 0.99, 1], [0, 1, 1]);
-  const introThreeX = transformRange(progress, [0.96, 0.99], [0, 0]);
-  const introThreeTextProgress = transformRange(progress, [0.97, 1], [0, 1]);
+  const introOpacity = transformRange(progress, [0.66, 0.705, 0.795, 0.835], [0, 1, 1, 0]);
+  const proteinImageOpacity = transformRange(progress, [0, 0.69, 0.72], [0, 0, 1]);
+  const introX = transformRange(progress, [0.66, 0.705, 0.795, 0.835], [-24, 0, 0, -20]);
+  const introTextProgress = transformRange(progress, [0.675, 0.785], [0, 1]);
+  const introTwoOpacity = transformRange(progress, [0.82, 0.865, 0.945, 0.975], [0, 1, 1, 0]);
+  const introTwoX = transformRange(progress, [0.82, 0.865, 0.945, 0.975], [24, 0, 0, -20]);
+  const introTwoTextProgress = transformRange(progress, [0.835, 0.94], [0, 1]);
+  const introThreeOpacity = transformRange(progress, [0.955, 0.982, 1], [0, 1, 1]);
+  const introThreeX = transformRange(progress, [0.955, 0.982], [0, 0]);
+  const introThreeTextProgress = transformRange(progress, [0.965, 1], [0, 1]);
 
   product.style.transform = `translate3d(0, ${productY}px, 0) scale(${productScale})`;
   setOpacity(product, 1);
   pageTitle.style.transform = `translate3d(-50%, ${pageTitleY}px, 0)`;
   setOpacity(pageTitle, pageTitleOpacity);
+  scrollIndicator.style.transform = `translate3d(-50%, ${scrollIndicatorY}px, 0)`;
+  setOpacity(scrollIndicator, scrollIndicatorOpacity);
 
   bottleClosed.style.transform = `translate3d(${bottleX}px, ${bottleY}px, 0) rotate(${bottleRotate}deg)`;
   setOpacity(bottleClosed, closedOpacity);

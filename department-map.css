@@ -478,6 +478,17 @@ img {
   display: none;
 }
 
+.department-detail-media.is-mete {
+  left: 55px;
+  top: 106px;
+  width: 160px;
+  height: 218px;
+}
+
+.department-detail-media.is-mete img {
+  object-fit: contain;
+}
+
 .department-detail-media.is-hael {
   left: 55px;
   top: 106px;

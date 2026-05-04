@@ -34,7 +34,7 @@ img {
 
 .scroll-scene {
   position: relative;
-  height: 1280vh;
+  height: 3400vh;
   background: var(--background);
 }
 
@@ -148,6 +148,39 @@ img {
   line-height: 1;
   letter-spacing: 2px;
   text-align: center;
+}
+
+.scroll-indicator {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(36px, 6.4vh, 72px);
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 29px;
+  color: var(--primary);
+  pointer-events: none;
+  transform: translateX(-50%);
+  will-change: opacity, transform;
+}
+
+.scroll-indicator p {
+  margin: 0;
+  color: var(--primary);
+  font-family: Orbitron, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.scroll-indicator img {
+  width: 30px;
+  height: 30px;
+  animation: scroll-indicator-pulse 1400ms ease-in-out infinite;
 }
 
 .center-stage {
@@ -581,6 +614,19 @@ img {
   height: var(--intro-three-line-height, 11px);
   max-width: none;
   transform: translateX(-50%) rotate(90deg);
+}
+
+@keyframes scroll-indicator-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(5px);
+  }
 }
 
 @media (max-width: 900px) {
