@@ -160,13 +160,13 @@ function updateMeteAnimation() {
   const subScale = transformRange(progress, [0.24, 0.4, 0.58, 1], [0.34, 1.08, 2.35, 2.35]);
   const subRotate = transformRange(progress, [0.24, 0.52], [-12, 0]);
 
-  const introOpacity = transformRange(progress, [0.53, 0.585, 0.725, 0.765], [0, 1, 1, 0]);
+  const introOpacity = transformRange(progress, [0.53, 0.585, 0.755, 0.805], [0, 1, 1, 0]);
   const proteinImageOpacity = transformRange(progress, [0, 0.57, 0.6], [0, 0, 1]);
-  const introX = transformRange(progress, [0.53, 0.585, 0.725, 0.765], [-24, 0, 0, -20]);
-  const introTextProgress = transformRange(progress, [0.55, 0.72], [0, 1]);
-  const introTwoOpacity = transformRange(progress, [0.82, 0.865, 0.945, 0.975], [0, 1, 1, 0]);
-  const introTwoX = transformRange(progress, [0.82, 0.865, 0.945, 0.975], [24, 0, 0, -20]);
-  const introTwoTextProgress = transformRange(progress, [0.835, 0.94], [0, 1]);
+  const introX = transformRange(progress, [0.53, 0.585, 0.755, 0.805], [-24, 0, 0, -20]);
+  const introTextProgress = transformRange(progress, [0.55, 0.75], [0, 1]);
+  const introTwoOpacity = transformRange(progress, [0.775, 0.825, 0.945, 0.975], [0, 1, 1, 0]);
+  const introTwoX = transformRange(progress, [0.775, 0.825, 0.945, 0.975], [24, 0, 0, -20]);
+  const introTwoTextProgress = transformRange(progress, [0.79, 0.94], [0, 1]);
   const introThreeOpacity = transformRange(progress, [0.955, 0.982, 1], [0, 1, 1]);
   const introThreeX = transformRange(progress, [0.955, 0.982], [0, 0]);
   const introThreeTextProgress = transformRange(progress, [0.965, 1], [0, 1]);
