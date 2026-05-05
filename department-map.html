@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="department-map.css">
+    <link rel="stylesheet" href="department-map.css?v=20260505-loading-final">
   </head>
   <body>
     <div class="department-page">
@@ -89,16 +89,19 @@
 
       <div class="loading-overlay" data-loading>
         <div class="loading-main">
-          <p class="loading-title" aria-label="Loading">
-            <span style="--wave-index: 0">L</span><span style="--wave-index: 1">o</span><span style="--wave-index: 2">a</span><span style="--wave-index: 3">d</span><span style="--wave-index: 4">i</span><span style="--wave-index: 5">n</span><span style="--wave-index: 6">g</span><span class="loading-dot" style="--wave-index: 7">.</span><span class="loading-dot" style="--wave-index: 8">.</span><span class="loading-dot" style="--wave-index: 9">.</span>
-          </p>
           <div class="loading-mark">
             <div class="loading-shape-frame">
               <div class="loading-complete-mask">
                 <img class="loading-pentagon-complete" src="assets/loading-pentagon-100.svg" alt="">
               </div>
+              <div class="loading-fingerprint" aria-hidden="true">
+                <img src="assets/loading-fingerprint.png?v=20260505-loading-final" alt="">
+                <img class="loading-fingerprint-scan" src="assets/loading-fingerprint.png?v=20260505-loading-final" alt="">
+              </div>
+              <div class="loading-scan-line" aria-hidden="true"></div>
             </div>
             <p class="loading-percent"><span data-loading-percent>0</span>%</p>
+            <p class="loading-verified">Verified</p>
           </div>
         </div>
       </div>
@@ -127,6 +130,6 @@
     </div>
 
     <script src="cursor-glow.js"></script>
-    <script src="department-map.js"></script>
+    <script src="department-map.js?v=20260505-loading-final"></script>
   </body>
 </html>

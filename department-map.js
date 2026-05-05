@@ -12,11 +12,11 @@ const departments = {
   wel: {
     label: "WĒL OUTREACH",
     restricted: false,
-    route: "#wel",
+    route: "wel-outreach.html",
     subtitle: "Trust and communication",
     description:
       "Wēl Outreach connects citizens to the program. It explains the Health Credit Score, shares updates, and supports participation. It serves as the main link between citizens and the system.",
-    image: "assets/department-overlay-wel.png",
+    image: "assets/department-overlay-wel-delivery.png",
     imageClass: "is-wel"
   },
   lic: {
@@ -70,6 +70,7 @@ const detailCopy = document.querySelector("[data-detail-copy]");
 const detailImage = document.querySelector("[data-detail-image]");
 const detailMedia = document.querySelector("[data-detail-media]");
 const detailLock = document.querySelector("[data-detail-lock]");
+let departmentDetailCloseTimer = null;
 
 function pentagonPoints(radius) {
   return Array.from({ length: 5 }, (_, index) => {
@@ -131,10 +132,11 @@ function prepareLoadingMorph() {
 
 function startLoading() {
   const duration = 5000;
-  const completeHold = 120;
+  const completeHold = 620;
   const morphDuration = 980;
   const start = performance.now();
   markLoadingSeen();
+  loadingOverlay.classList.remove("is-verified");
 
   function update(now) {
     const progress = Math.min(1, (now - start) / duration);
@@ -145,6 +147,7 @@ function startLoading() {
     loadingOverlay.style.setProperty("--loading-progress", percent);
     loadingOverlay.style.setProperty("--loading-shape-height", `${shapeHeight}px`);
     loadingPercent.textContent = String(percent);
+    loadingOverlay.classList.toggle("is-verified", percent >= 100);
 
     if (progress < 1) {
       requestAnimationFrame(update);
@@ -176,6 +179,7 @@ if (hasSeenLoading()) {
 }
 
 function openDepartmentDetail(department) {
+  window.clearTimeout(departmentDetailCloseTimer);
   detailTitle.textContent = department.label;
   detailSubtitle.textContent = department.subtitle || "Department overview";
   detailCopy.textContent = department.description || "";
@@ -195,8 +199,14 @@ function openDepartmentDetail(department) {
 }
 
 function closeDepartmentDetail() {
+  window.clearTimeout(departmentDetailCloseTimer);
   departmentDetail.classList.remove("is-open");
   departmentDetail.setAttribute("aria-hidden", "true");
+}
+
+function scheduleDepartmentDetailClose() {
+  window.clearTimeout(departmentDetailCloseTimer);
+  departmentDetailCloseTimer = window.setTimeout(closeDepartmentDetail, 140);
 }
 
 function openRestricted(department) {
@@ -216,6 +226,7 @@ function closeRestricted() {
 
 document.querySelectorAll("[data-dept]").forEach((button) => {
   function handleDepartmentEnter() {
+    window.clearTimeout(departmentDetailCloseTimer);
     const department = departments[button.dataset.dept];
     if (!button.classList.contains("is-ready")) return;
     if (department.restricted) {
@@ -226,10 +237,8 @@ document.querySelectorAll("[data-dept]").forEach((button) => {
   }
 
   button.addEventListener("pointerenter", handleDepartmentEnter);
-  button.addEventListener("mouseenter", handleDepartmentEnter);
   button.addEventListener("focus", handleDepartmentEnter);
-  button.addEventListener("pointerleave", closeDepartmentDetail);
-  button.addEventListener("mouseleave", closeDepartmentDetail);
+  button.addEventListener("pointerleave", scheduleDepartmentDetailClose);
   button.addEventListener("blur", closeDepartmentDetail);
 
   button.addEventListener("click", () => {
