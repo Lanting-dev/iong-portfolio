@@ -142,8 +142,17 @@
       "summary",
       "[role='button']",
       "[tabindex]:not([tabindex='-1'])",
-      ".dept-label"
+      ".dept-logo",
+      ".employee",
+      ".logo",
+      ".dept-label",
+      ".onboard-badge",
+      "[data-onboard-badge]"
     ].join(",")));
+  }
+
+  function updateHoverState(target) {
+    document.body.classList.toggle("cursor-glow-hovering", isInteractiveTarget(target));
   }
 
   function render() {
@@ -165,7 +174,11 @@
     targetX = event.clientX;
     targetY = event.clientY;
     document.body.classList.add("cursor-glow-active");
-    document.body.classList.toggle("cursor-glow-hovering", isInteractiveTarget(event.target));
+    updateHoverState(document.elementFromPoint(event.clientX, event.clientY) || event.target);
+  }, { passive: true });
+
+  window.addEventListener("pointerover", (event) => {
+    updateHoverState(event.target);
   }, { passive: true });
 
   window.addEventListener("pointerleave", () => {

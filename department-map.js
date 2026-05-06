@@ -79,6 +79,9 @@ const onboardBadge = document.querySelector("[data-onboard-badge]");
 let departmentDetailCloseTimer = null;
 let activePanelDepartment = null;
 let activePanelStartedAt = 0;
+const departmentLabelHoverTimers = new WeakMap();
+let activeHoverLabel = null;
+let isOnboardHovering = false;
 
 function readDepartmentPanelTimes() {
   try {
@@ -283,6 +286,10 @@ function openDepartmentDetail(department) {
   detailSubtitle.textContent = department.subtitle || "Department overview";
   detailCopy.textContent = department.description || "";
   detailMedia.className = `department-detail-media ${department.imageClass || ""}`;
+  departmentDetail.classList.remove("is-from-mete", "is-from-wel", "is-from-hael");
+  if (department.id) {
+    departmentDetail.classList.add(`is-from-${department.id}`);
+  }
 
   if (department.restricted) {
     detailImage.hidden = true;
@@ -325,8 +332,22 @@ function closeRestricted() {
 }
 
 document.querySelectorAll("[data-dept]").forEach((button) => {
+  function setDepartmentLabelHover(isHovered) {
+    window.clearTimeout(departmentLabelHoverTimers.get(button));
+    if (isHovered) {
+      button.classList.add("is-hovered");
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      button.classList.remove("is-hovered");
+    }, 120);
+    departmentLabelHoverTimers.set(button, timer);
+  }
+
   function handleDepartmentEnter() {
     window.clearTimeout(departmentDetailCloseTimer);
+    setDepartmentLabelHover(true);
     const id = button.dataset.dept;
     const department = departments[id];
     if (!button.classList.contains("is-ready")) return;
@@ -339,8 +360,15 @@ document.querySelectorAll("[data-dept]").forEach((button) => {
 
   button.addEventListener("pointerenter", handleDepartmentEnter);
   button.addEventListener("focus", handleDepartmentEnter);
-  button.addEventListener("pointerleave", scheduleDepartmentDetailClose);
-  button.addEventListener("blur", closeDepartmentDetail);
+  button.addEventListener("pointerleave", (event) => {
+    if (getDepartmentLabelAtPoint(event.clientX, event.clientY) === button) return;
+    setDepartmentLabelHover(false);
+    scheduleDepartmentDetailClose();
+  });
+  button.addEventListener("blur", () => {
+    setDepartmentLabelHover(false);
+    closeDepartmentDetail();
+  });
 
   button.addEventListener("click", () => {
     const id = button.dataset.dept;
@@ -359,17 +387,74 @@ document.querySelectorAll("[data-dept]").forEach((button) => {
   });
 });
 
-if (onboardBadge) {
-  onboardBadge.addEventListener("click", () => {
-    if (hasCompletedExploration()) assignDepartment();
+function getDepartmentLabelAtPoint(x, y) {
+  let matchedLabel = null;
+
+  document.querySelectorAll("[data-dept].is-ready").forEach((button) => {
+    const rect = button.getBoundingClientRect();
+    const extraX = button.classList.contains("dept-wel") ? 96 : 54;
+    const extraY = 34;
+    const withinX = x >= rect.left - extraX && x <= rect.right + extraX;
+    const withinY = y >= rect.top - extraY && y <= rect.bottom + extraY;
+    if (withinX && withinY) matchedLabel = button;
   });
 
-  onboardBadge.addEventListener("keydown", (event) => {
-    if (!hasCompletedExploration()) return;
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      assignDepartment();
+  return matchedLabel;
+}
+
+function syncDepartmentHoverFromPoint(x, y) {
+  const nextLabel = getDepartmentLabelAtPoint(x, y);
+  if (nextLabel === activeHoverLabel) return;
+
+  if (activeHoverLabel) {
+    window.clearTimeout(departmentLabelHoverTimers.get(activeHoverLabel));
+    activeHoverLabel.classList.remove("is-hovered");
+  }
+
+  activeHoverLabel = nextLabel;
+
+  if (activeHoverLabel) {
+    activeHoverLabel.classList.add("is-hovered");
+    const id = activeHoverLabel.dataset.dept;
+    const department = departments[id];
+    if (department && !department.restricted) {
+      window.clearTimeout(departmentDetailCloseTimer);
+      openDepartmentDetail({ ...department, id });
     }
+    return;
+  }
+
+  scheduleDepartmentDetailClose();
+}
+
+function isPointInsideOnboardBadge(x, y) {
+  if (!onboardBadge || !page.classList.contains("is-onboarded")) return false;
+  const rect = onboardBadge.getBoundingClientRect();
+  return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+}
+
+function setOnboardHover(isHovered) {
+  if (!onboardBadge || isHovered === isOnboardHovering) return;
+  isOnboardHovering = isHovered;
+  onboardBadge.classList.toggle("is-hovered", isHovered);
+  document.body.classList.toggle("cursor-glow-hovering", isHovered || Boolean(activeHoverLabel));
+}
+
+function syncOnboardHoverFromPoint(x, y) {
+  setOnboardHover(isPointInsideOnboardBadge(x, y));
+}
+
+if (onboardBadge) {
+  onboardBadge.addEventListener("focus", () => {
+    setOnboardHover(true);
+  });
+
+  onboardBadge.addEventListener("blur", () => {
+    setOnboardHover(false);
+  });
+
+  onboardBadge.addEventListener("click", () => {
+    if (hasCompletedExploration()) assignDepartment();
   });
 }
 
@@ -379,11 +464,18 @@ stage.addEventListener("mousemove", (event) => {
   const normY = (event.clientY - rect.top - rect.height / 2) / rect.height;
   stage.style.setProperty("--tilt-x", `${normY * 8}deg`);
   stage.style.setProperty("--tilt-y", `${normX * -12}deg`);
+  syncDepartmentHoverFromPoint(event.clientX, event.clientY);
+  syncOnboardHoverFromPoint(event.clientX, event.clientY);
 });
 
 stage.addEventListener("mouseleave", () => {
   stage.style.setProperty("--tilt-x", "0deg");
   stage.style.setProperty("--tilt-y", "0deg");
+  if (activeHoverLabel) {
+    activeHoverLabel.classList.remove("is-hovered");
+    activeHoverLabel = null;
+  }
+  setOnboardHover(false);
   closeDepartmentDetail();
 });
 
