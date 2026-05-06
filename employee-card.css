@@ -36,14 +36,19 @@ img {
 }
 
 .nav {
+  position: relative;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 20px clamp(24px, 4.17vw, 80px);
+  padding: 44px clamp(24px, 4.17vw, 80px);
 }
 
 .logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 48px;

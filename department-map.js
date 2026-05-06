@@ -444,6 +444,13 @@ function syncOnboardHoverFromPoint(x, y) {
   setOnboardHover(isPointInsideOnboardBadge(x, y));
 }
 
+function activateOnboardBadge(event) {
+  if (!hasCompletedExploration()) return;
+  event.preventDefault();
+  event.stopPropagation();
+  assignDepartment();
+}
+
 if (onboardBadge) {
   onboardBadge.addEventListener("focus", () => {
     setOnboardHover(true);
@@ -453,9 +460,10 @@ if (onboardBadge) {
     setOnboardHover(false);
   });
 
-  onboardBadge.addEventListener("click", () => {
-    if (hasCompletedExploration()) assignDepartment();
-  });
+  document.addEventListener("click", (event) => {
+    if (!isPointInsideOnboardBadge(event.clientX, event.clientY)) return;
+    activateOnboardBadge(event);
+  }, true);
 }
 
 stage.addEventListener("mousemove", (event) => {
