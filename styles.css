@@ -34,7 +34,7 @@ img {
 
 .scroll-scene {
   position: relative;
-  height: 3400vh;
+  height: 2800vh;
   background: var(--background);
 }
 
@@ -649,6 +649,12 @@ img {
     height: min(560px, 92vmin);
   }
 
+}
+
+@media (min-width: 1400px) and (min-height: 820px) {
+  .scroll-scene {
+    height: 2200vh;
+  }
 }
 
 @media (max-width: 620px) {
