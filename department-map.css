@@ -448,18 +448,18 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 255px;
-  height: 36px;
-  padding: 0 16px;
+  width: 188px;
+  height: 28px;
+  padding: 0 12px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   background: transparent;
   color: var(--secondary);
   font-family: Orbitron, sans-serif;
-  font-size: 14px;
+  font-size: 10px;
   font-weight: 400;
   line-height: 1;
-  letter-spacing: 2px;
+  letter-spacing: 1.6px;
   text-transform: uppercase;
   white-space: nowrap;
   opacity: 0;
@@ -473,7 +473,7 @@ img {
 
 .onboard-badge span {
   display: block;
-  width: 223px;
+  width: 164px;
   max-width: 100%;
   text-align: center;
 }
@@ -491,7 +491,7 @@ img {
   border-color: rgba(255, 255, 255, 0.66);
   box-shadow: 0 0 18px rgba(255, 255, 255, 0.1);
   outline: none;
-  transform: translate(-50%, -50%) scale(1.08);
+  transform: translate(-50%, -50%) scale(1.06);
 }
 
 .dept-mete {

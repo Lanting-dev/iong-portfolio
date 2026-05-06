@@ -55,6 +55,7 @@ const visitedDepartmentsKey = "iongVisitedDepartments";
 const requiredVisitedDepartments = ["mete", "wel", "hael"];
 const departmentPanelTimesKey = "iongDepartmentPanelTimes";
 const assignedDepartmentKey = "iongAssignedDepartment";
+const lastInteractedDepartmentKey = "iongLastInteractedDepartment";
 const centerX = 450;
 const centerY = 310;
 
@@ -107,6 +108,12 @@ function startDepartmentPanelTimer(id) {
   stopDepartmentPanelTimer();
   activePanelDepartment = id;
   activePanelStartedAt = performance.now();
+
+  try {
+    window.sessionStorage.setItem(lastInteractedDepartmentKey, id);
+  } catch (error) {
+    // Storage can be unavailable in private contexts; assignment still has a fallback.
+  }
 }
 
 function stopDepartmentPanelTimer() {
@@ -124,9 +131,16 @@ function stopDepartmentPanelTimer() {
 function assignDepartment() {
   stopDepartmentPanelTimer();
   const times = readDepartmentPanelTimes();
-  const assigned = requiredVisitedDepartments.reduce((winner, id) => (
-    times[id] > times[winner] ? id : winner
-  ), requiredVisitedDepartments[0]);
+  const highestTime = Math.max(...requiredVisitedDepartments.map((id) => times[id]));
+  const tiedDepartments = requiredVisitedDepartments.filter((id) => times[id] === highestTime);
+  let assigned = tiedDepartments[0] || requiredVisitedDepartments[0];
+
+  try {
+    const lastInteracted = window.sessionStorage.getItem(lastInteractedDepartmentKey);
+    if (tiedDepartments.includes(lastInteracted)) assigned = lastInteracted;
+  } catch (error) {
+    // Storage can be unavailable in private contexts; the fallback assignment still works.
+  }
 
   try {
     window.sessionStorage.setItem(assignedDepartmentKey, assigned);
