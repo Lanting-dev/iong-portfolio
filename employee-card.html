@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="employee-card.css?v=20260505-assigned-department">
+    <link rel="stylesheet" href="employee-card.css?v=20260506-employee-badge-layout">
   </head>
   <body>
     <main class="employee-card-page">
@@ -21,34 +21,41 @@
 
       <section class="employee-card-stage" aria-label="Employee assignment">
         <header class="employee-welcome">
-          <p>WELCOME EMPLOYEE</p>
+          <p>WELCOME ONBOARD</p>
           <span>#004582</span>
         </header>
 
-        <article class="employee-card" data-employee-card>
-          <div class="card-scan" aria-hidden="true"></div>
-          <div class="card-header">
-            <img src="assets/subtract.svg" alt="">
-            <div>
-              <p>IONG CLEARANCE</p>
-              <span>EMPLOYEE ACCESS VERIFIED</span>
+        <article class="employee-card" data-employee-card data-node-id="291:1548">
+          <div class="badge-hole" aria-hidden="true"></div>
+
+          <div class="badge-logo" data-node-id="291:1796">
+            <img src="assets/employee-badge-logo.png" alt="IONG">
+          </div>
+
+          <div class="badge-media" data-node-id="291:1809">
+            <div class="badge-barcode" aria-hidden="true" data-node-id="291:1916">
+              <img src="assets/employee-badge-barcode.png" alt="">
+            </div>
+            <div class="badge-photo" data-node-id="291:1889">
+              <img src="assets/employee-badge-photo.png" alt="">
             </div>
           </div>
 
-          <div class="card-body">
-            <p class="card-label">Assigned Department</p>
-            <h1 data-assigned-label>PROCESSING</h1>
-            <p data-assigned-subtitle>Analyzing department interaction profile</p>
-          </div>
-
-          <div class="card-footer">
-            <span>EMPLOYEE #004582</span>
-            <span data-assigned-code>ASSIGNMENT PENDING</span>
+          <div class="badge-details" data-node-id="291:1326">
+            <div class="badge-assignment">
+              <p class="badge-access">Partial-Access</p>
+              <h1 data-assigned-label>PROCESSING</h1>
+              <div class="badge-divider" aria-hidden="true"></div>
+            </div>
+            <div class="badge-employee">
+              <p>Employee</p>
+              <span>#004582</span>
+            </div>
           </div>
         </article>
       </section>
     </main>
 
-    <script src="employee-card.js?v=20260505-assigned-department"></script>
+    <script src="employee-card.js?v=20260506-employee-badge-layout"></script>
   </body>
 </html>

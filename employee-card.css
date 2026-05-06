@@ -70,8 +70,8 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(48px, 7vh, 88px);
-  padding: 40px 24px 88px;
+  gap: clamp(56px, 8vh, 96px);
+  padding: 20px 24px 56px;
 }
 
 .employee-welcome {
@@ -86,19 +86,17 @@ img {
 
 .employee-welcome p,
 .employee-welcome span,
-.card-header p,
-.card-header span,
-.card-label,
-.card-body h1,
-.card-body p,
-.card-footer span {
+.badge-access,
+.badge-assignment h1,
+.badge-employee p,
+.badge-employee span {
   margin: 0;
 }
 
 .employee-welcome p,
-.card-header p,
-.card-body h1,
-.card-footer span {
+.badge-access,
+.badge-assignment h1,
+.badge-employee p {
   font-family: Orbitron, sans-serif;
   font-weight: 400;
   line-height: 1;
@@ -118,116 +116,143 @@ img {
 
 .employee-card {
   position: relative;
-  width: min(680px, calc(100vw - 48px));
-  min-height: 390px;
+  width: min(462px, calc(100vw - 72px), calc((100vh - 210px) * 0.5943));
+  aspect-ratio: 462 / 696;
   overflow: hidden;
-  padding: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-  background:
-    linear-gradient(135deg, rgba(42, 138, 122, 0.12), rgba(0, 0, 0, 0) 42%),
-    rgba(0, 0, 0, 0.92);
+  border: 0;
+  border-radius: 15px;
+  background: #ffffff;
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.04),
-    0 0 34px rgba(42, 138, 122, 0.1);
+    0 24px 80px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+  color: #000000;
   opacity: 0;
-  transform: translateY(28px) scale(0.965);
+  transform: translateY(28px) rotate(7deg) scale(0.965);
   animation: card-enter 980ms cubic-bezier(0.22, 1, 0.36, 1) 620ms both;
 }
 
-.employee-card::before {
-  content: "";
+.badge-hole {
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background:
-    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
-  opacity: 0;
-  transform: translateX(-100%);
-  animation: card-light-sweep 1500ms cubic-bezier(0.22, 1, 0.36, 1) 1300ms both;
+  left: 50%;
+  top: 4.17%;
+  width: 31.39%;
+  height: 5.17%;
+  border-radius: 100px;
+  background: #000000;
+  transform: translateX(-50%);
 }
 
-.card-scan {
+.badge-logo {
   position: absolute;
-  left: -10%;
-  top: 0;
-  width: 120%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow:
-    0 0 12px rgba(255, 255, 255, 0.26),
-    0 0 24px rgba(42, 138, 122, 0.16);
-  opacity: 0;
-  animation: card-scan 1300ms ease-in-out 900ms both;
+  left: 50%;
+  top: 12.79%;
+  width: 26.948%;
+  height: 3.448%;
+  transform: translateX(-50%);
 }
 
-.card-header,
-.card-body,
-.card-footer {
+.badge-logo img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+.badge-media {
+  position: absolute;
+  left: 8.87%;
+  top: 22.56%;
+  width: 82.68%;
+}
+
+.badge-barcode {
+  width: 100%;
+  aspect-ratio: 382 / 80.932;
+  height: auto;
+}
+
+.badge-barcode img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+.badge-photo {
   position: relative;
-  z-index: 1;
+  width: 100%;
+  aspect-ratio: 382 / 221;
+  margin-top: 0;
+  overflow: hidden;
+  border-radius: 4px;
 }
 
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: 24px;
+.badge-photo img {
+  position: absolute;
+  left: -0.43%;
+  top: -42.56%;
+  width: 100.87%;
+  height: 191.89%;
+  max-width: none;
+  object-fit: cover;
 }
 
-.card-header img {
-  width: 32px;
-  height: 31px;
-}
-
-.card-header div {
+.badge-details {
+  position: absolute;
+  left: 50%;
+  top: 67.8%;
+  width: 82.68%;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 26px;
+  transform: translateX(-50%);
 }
 
-.card-header p {
+.badge-assignment {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.badge-access {
+  color: #000000;
   font-size: 16px;
-  letter-spacing: 4px;
-}
-
-.card-header span,
-.card-label,
-.card-body p,
-.card-footer span {
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 12px;
-  line-height: 1;
   letter-spacing: 2px;
-  text-transform: uppercase;
 }
 
-.card-body {
+.badge-assignment h1 {
+  color: #000000;
+  font-size: var(--badge-title-size, 24px);
+  font-weight: 500;
+  letter-spacing: var(--badge-title-spacing, 3px);
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.badge-divider {
+  width: 100%;
+  height: 1px;
+  background: #000000;
+  opacity: 0.8;
+}
+
+.badge-employee {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  margin-top: 88px;
+  gap: 4px;
 }
 
-.card-body h1 {
-  color: var(--assigned);
-  font-size: clamp(24px, 2.5vw, 48px);
-  letter-spacing: clamp(5px, 0.625vw, 12px);
-  text-shadow: 0 0 18px color-mix(in srgb, var(--assigned) 38%, transparent);
+.badge-employee p {
+  color: #000000;
+  font-size: 16px;
+  letter-spacing: 2px;
 }
 
-.card-body p:not(.card-label) {
-  max-width: 480px;
-  color: var(--secondary);
-  font-size: 14px;
-  line-height: 1.45;
-  letter-spacing: 1.5px;
-}
-
-.card-footer {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  margin-top: 88px;
+.badge-employee span {
+  color: var(--primary);
+  font-size: 10px;
+  line-height: 1;
 }
 
 @keyframes employee-title-enter {
@@ -240,55 +265,28 @@ img {
 @keyframes card-enter {
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes card-scan {
-  0% {
-    top: 0;
-    opacity: 0;
-  }
-
-  12%,
-  82% {
-    opacity: 1;
-  }
-
-  100% {
-    top: 100%;
-    opacity: 0;
-  }
-}
-
-@keyframes card-light-sweep {
-  0% {
-    opacity: 0;
-    transform: translateX(-100%);
-  }
-
-  35% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateX(100%);
+    transform: translateY(0) rotate(12.08deg) scale(1);
   }
 }
 
 @media (max-width: 720px) {
+  .employee-card-stage {
+    gap: 58px;
+    padding-bottom: 56px;
+  }
+
   .employee-card {
-    min-height: 360px;
-    padding: 24px;
+    width: min(320px, calc(100vw - 56px));
   }
 
-  .card-body,
-  .card-footer {
-    margin-top: 64px;
+  .badge-access,
+  .badge-employee p {
+    font-size: 11px;
+    letter-spacing: 1.4px;
   }
 
-  .card-footer {
-    flex-direction: column;
+  .badge-assignment h1 {
+    font-size: 17px;
+    letter-spacing: 2px;
   }
 }
