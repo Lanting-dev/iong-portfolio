@@ -26,19 +26,19 @@
     }
 
     .cursor-glow {
-      width: 300px;
-      height: 300px;
-      margin-left: -150px;
-      margin-top: -150px;
+      width: 220px;
+      height: 220px;
+      margin-left: -110px;
+      margin-top: -110px;
       border-radius: 50%;
       background:
         radial-gradient(circle,
-          rgba(232, 234, 235, 0.18) 0%,
-          rgba(42, 138, 122, 0.16) 18%,
-          rgba(42, 138, 122, 0.07) 42%,
-          rgba(42, 138, 122, 0) 74%);
+          rgba(232, 234, 235, 0.08) 0%,
+          rgba(42, 138, 122, 0.1) 20%,
+          rgba(42, 138, 122, 0.04) 48%,
+          rgba(42, 138, 122, 0) 76%);
       mix-blend-mode: screen;
-      filter: blur(1px);
+      filter: blur(2px);
     }
 
     .cursor-glow-dot {
@@ -66,17 +66,18 @@
     }
 
     .cursor-glow-dot::before {
-      inset: 11px;
-      background: rgba(232, 234, 235, 0.72);
+      inset: 9px;
+      background: rgba(232, 234, 235, 0.46);
       box-shadow:
-        0 0 8px rgba(232, 234, 235, 0.48),
-        0 0 22px rgba(42, 138, 122, 0.48);
+        0 0 6px rgba(232, 234, 235, 0.22),
+        0 0 16px rgba(42, 138, 122, 0.22);
       opacity: 1;
     }
 
     .cursor-glow-dot::after {
-      inset: 5px;
-      opacity: 0;
+      inset: 4px;
+      border: 1px solid rgba(232, 234, 235, 0.34);
+      opacity: 0.45;
     }
 
     body.cursor-glow-active .cursor-glow,
@@ -85,7 +86,7 @@
     }
 
     body.cursor-glow-hovering .cursor-glow {
-      opacity: 0;
+      opacity: 0.42;
     }
 
     body.cursor-glow-hovering .cursor-glow-dot {
@@ -93,18 +94,18 @@
     }
 
     body.cursor-glow-hovering .cursor-glow-dot::before {
-      inset: 6px;
+      inset: 7px;
       opacity: 1;
-      border: 1px solid rgba(232, 234, 235, 0.9);
+      border: 1px solid rgba(232, 234, 235, 0.86);
       background: transparent;
       box-shadow:
-        0 0 9px rgba(232, 234, 235, 0.34),
-        inset 0 0 8px rgba(232, 234, 235, 0.12);
+        0 0 8px rgba(232, 234, 235, 0.22),
+        inset 0 0 7px rgba(232, 234, 235, 0.1);
     }
 
     body.cursor-glow-hovering .cursor-glow-dot::after {
-      inset: 2px;
-      opacity: 0;
+      inset: 3px;
+      opacity: 0.22;
     }
 
     body.cursor-glow-pressed .cursor-glow-dot::before,
@@ -146,8 +147,8 @@
   }
 
   function render() {
-    const glowEase = reducedMotion ? 1 : 0.16;
-    const dotEase = reducedMotion ? 1 : 0.42;
+    const glowEase = reducedMotion ? 1 : 0.1;
+    const dotEase = reducedMotion ? 1 : 0.32;
 
     glowX += (targetX - glowX) * glowEase;
     glowY += (targetY - glowY) * glowEase;

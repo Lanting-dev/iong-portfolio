@@ -1,0 +1,294 @@
+:root {
+  --background: #000000;
+  --primary: #2a8a7a;
+  --secondary: #ffffff;
+  --assigned: #2a8a7a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+  background: var(--background);
+  color: var(--secondary);
+  font-family: Inter, Arial, sans-serif;
+}
+
+body {
+  overflow: hidden;
+}
+
+img {
+  display: block;
+  user-select: none;
+}
+
+.employee-card-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+}
+
+.nav {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 20px clamp(24px, 4.17vw, 80px);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+.logo img {
+  width: 24px;
+  height: 23px;
+}
+
+.logo span {
+  font-family: Orbitron, sans-serif;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 16px;
+}
+
+.employee-card-stage {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(48px, 7vh, 88px);
+  padding: 40px 24px 88px;
+}
+
+.employee-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(18px);
+  animation: employee-title-enter 900ms cubic-bezier(0.22, 1, 0.36, 1) 260ms both;
+}
+
+.employee-welcome p,
+.employee-welcome span,
+.card-header p,
+.card-header span,
+.card-label,
+.card-body h1,
+.card-body p,
+.card-footer span {
+  margin: 0;
+}
+
+.employee-welcome p,
+.card-header p,
+.card-body h1,
+.card-footer span {
+  font-family: Orbitron, sans-serif;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.employee-welcome p {
+  font-size: clamp(20px, 1.667vw, 32px);
+  letter-spacing: clamp(7px, 0.833vw, 16px);
+}
+
+.employee-welcome span {
+  color: var(--primary);
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.employee-card {
+  position: relative;
+  width: min(680px, calc(100vw - 48px));
+  min-height: 390px;
+  overflow: hidden;
+  padding: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  background:
+    linear-gradient(135deg, rgba(42, 138, 122, 0.12), rgba(0, 0, 0, 0) 42%),
+    rgba(0, 0, 0, 0.92);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0 34px rgba(42, 138, 122, 0.1);
+  opacity: 0;
+  transform: translateY(28px) scale(0.965);
+  animation: card-enter 980ms cubic-bezier(0.22, 1, 0.36, 1) 620ms both;
+}
+
+.employee-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  opacity: 0;
+  transform: translateX(-100%);
+  animation: card-light-sweep 1500ms cubic-bezier(0.22, 1, 0.36, 1) 1300ms both;
+}
+
+.card-scan {
+  position: absolute;
+  left: -10%;
+  top: 0;
+  width: 120%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 0 12px rgba(255, 255, 255, 0.26),
+    0 0 24px rgba(42, 138, 122, 0.16);
+  opacity: 0;
+  animation: card-scan 1300ms ease-in-out 900ms both;
+}
+
+.card-header,
+.card-body,
+.card-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.card-header img {
+  width: 32px;
+  height: 31px;
+}
+
+.card-header div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-header p {
+  font-size: 16px;
+  letter-spacing: 4px;
+}
+
+.card-header span,
+.card-label,
+.card-body p,
+.card-footer span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 88px;
+}
+
+.card-body h1 {
+  color: var(--assigned);
+  font-size: clamp(24px, 2.5vw, 48px);
+  letter-spacing: clamp(5px, 0.625vw, 12px);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--assigned) 38%, transparent);
+}
+
+.card-body p:not(.card-label) {
+  max-width: 480px;
+  color: var(--secondary);
+  font-size: 14px;
+  line-height: 1.45;
+  letter-spacing: 1.5px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 88px;
+}
+
+@keyframes employee-title-enter {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-enter {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes card-scan {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+
+  12%,
+  82% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes card-light-sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 720px) {
+  .employee-card {
+    min-height: 360px;
+    padding: 24px;
+  }
+
+  .card-body,
+  .card-footer {
+    margin-top: 64px;
+  }
+
+  .card-footer {
+    flex-direction: column;
+  }
+}

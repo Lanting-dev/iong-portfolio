@@ -51,6 +51,10 @@ const revealOrder = ["mete", "hael", "wel", "lif", "lic"];
 const deptStagger = 220;
 const postLoadingDelay = 760;
 const loadingSeenKey = "iongDepartmentLoadingSeen";
+const visitedDepartmentsKey = "iongVisitedDepartments";
+const requiredVisitedDepartments = ["mete", "wel", "hael"];
+const departmentPanelTimesKey = "iongDepartmentPanelTimes";
+const assignedDepartmentKey = "iongAssignedDepartment";
 const centerX = 450;
 const centerY = 310;
 
@@ -70,7 +74,85 @@ const detailCopy = document.querySelector("[data-detail-copy]");
 const detailImage = document.querySelector("[data-detail-image]");
 const detailMedia = document.querySelector("[data-detail-media]");
 const detailLock = document.querySelector("[data-detail-lock]");
+const onboardBadge = document.querySelector("[data-onboard-badge]");
 let departmentDetailCloseTimer = null;
+let activePanelDepartment = null;
+let activePanelStartedAt = 0;
+
+function readDepartmentPanelTimes() {
+  try {
+    const stored = JSON.parse(window.sessionStorage.getItem(departmentPanelTimesKey) || "{}");
+    return {
+      mete: Number(stored.mete) || 0,
+      hael: Number(stored.hael) || 0,
+      wel: Number(stored.wel) || 0
+    };
+  } catch (error) {
+    return { mete: 0, hael: 0, wel: 0 };
+  }
+}
+
+function writeDepartmentPanelTimes(times) {
+  try {
+    window.sessionStorage.setItem(departmentPanelTimesKey, JSON.stringify(times));
+  } catch (error) {
+    // Storage can be unavailable in private contexts; the page still works.
+  }
+}
+
+function startDepartmentPanelTimer(id) {
+  if (!requiredVisitedDepartments.includes(id)) return;
+  if (activePanelDepartment === id) return;
+
+  stopDepartmentPanelTimer();
+  activePanelDepartment = id;
+  activePanelStartedAt = performance.now();
+}
+
+function stopDepartmentPanelTimer() {
+  if (!activePanelDepartment || !activePanelStartedAt) return;
+
+  const elapsed = performance.now() - activePanelStartedAt;
+  const times = readDepartmentPanelTimes();
+  times[activePanelDepartment] += elapsed;
+  writeDepartmentPanelTimes(times);
+
+  activePanelDepartment = null;
+  activePanelStartedAt = 0;
+}
+
+function assignDepartment() {
+  stopDepartmentPanelTimer();
+  const times = readDepartmentPanelTimes();
+  const assigned = requiredVisitedDepartments.reduce((winner, id) => (
+    times[id] > times[winner] ? id : winner
+  ), requiredVisitedDepartments[0]);
+
+  try {
+    window.sessionStorage.setItem(assignedDepartmentKey, assigned);
+  } catch (error) {
+    // Storage can be unavailable in private contexts; the fallback page still renders.
+  }
+
+  window.location.href = "employee-card.html";
+}
+
+function hasCompletedExploration() {
+  try {
+    const visited = JSON.parse(window.sessionStorage.getItem(visitedDepartmentsKey) || "{}");
+    return requiredVisitedDepartments.every((id) => visited[id]);
+  } catch (error) {
+    return false;
+  }
+}
+
+function updateOnboardedState() {
+  const completed = hasCompletedExploration();
+  page.classList.toggle("is-onboarded", completed);
+  if (onboardBadge) {
+    onboardBadge.setAttribute("aria-hidden", completed ? "false" : "true");
+  }
+}
 
 function pentagonPoints(radius) {
   return Array.from({ length: 5 }, (_, index) => {
@@ -84,6 +166,8 @@ function pentagonPoints(radius) {
 document.querySelectorAll("[data-radius]").forEach((polygon) => {
   polygon.setAttribute("points", pentagonPoints(Number(polygon.dataset.radius)));
 });
+
+updateOnboardedState();
 
 const timers = [];
 
@@ -180,6 +264,7 @@ if (hasSeenLoading()) {
 
 function openDepartmentDetail(department) {
   window.clearTimeout(departmentDetailCloseTimer);
+  startDepartmentPanelTimer(department.id);
   detailTitle.textContent = department.label;
   detailSubtitle.textContent = department.subtitle || "Department overview";
   detailCopy.textContent = department.description || "";
@@ -200,6 +285,7 @@ function openDepartmentDetail(department) {
 
 function closeDepartmentDetail() {
   window.clearTimeout(departmentDetailCloseTimer);
+  stopDepartmentPanelTimer();
   departmentDetail.classList.remove("is-open");
   departmentDetail.setAttribute("aria-hidden", "true");
 }
@@ -227,13 +313,14 @@ function closeRestricted() {
 document.querySelectorAll("[data-dept]").forEach((button) => {
   function handleDepartmentEnter() {
     window.clearTimeout(departmentDetailCloseTimer);
-    const department = departments[button.dataset.dept];
+    const id = button.dataset.dept;
+    const department = departments[id];
     if (!button.classList.contains("is-ready")) return;
     if (department.restricted) {
       closeDepartmentDetail();
       return;
     }
-    openDepartmentDetail(department);
+    openDepartmentDetail({ ...department, id });
   }
 
   button.addEventListener("pointerenter", handleDepartmentEnter);
@@ -242,7 +329,8 @@ document.querySelectorAll("[data-dept]").forEach((button) => {
   button.addEventListener("blur", closeDepartmentDetail);
 
   button.addEventListener("click", () => {
-    const department = departments[button.dataset.dept];
+    const id = button.dataset.dept;
+    const department = departments[id];
     if (!button.classList.contains("is-ready")) return;
 
     if (department.restricted) {
@@ -251,10 +339,25 @@ document.querySelectorAll("[data-dept]").forEach((button) => {
     }
 
     if (department.route) {
+      stopDepartmentPanelTimer();
       window.location.href = department.route;
     }
   });
 });
+
+if (onboardBadge) {
+  onboardBadge.addEventListener("click", () => {
+    if (hasCompletedExploration()) assignDepartment();
+  });
+
+  onboardBadge.addEventListener("keydown", (event) => {
+    if (!hasCompletedExploration()) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      assignDepartment();
+    }
+  });
+}
 
 stage.addEventListener("mousemove", (event) => {
   const rect = stage.getBoundingClientRect();
@@ -282,5 +385,6 @@ window.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("beforeunload", () => {
+  stopDepartmentPanelTimer();
   timers.forEach(clearTimeout);
 });
