@@ -189,7 +189,7 @@ img {
   position: absolute;
   left: 0;
   right: 0;
-  top: 28vh;
+  top: 20vh;
   z-index: 2;
   transition: opacity 300ms ease;
 }
@@ -198,9 +198,6 @@ img {
   animation-play-state: paused;
 }
 
-.loading-overlay.is-morph .loading-scantrack {
-  opacity: 0;
-}
 
 .loading-scanrow {
   position: relative;
@@ -928,7 +925,7 @@ img {
   }
 
   to {
-    transform: translateY(24vh);
+    transform: translateY(40vh);
   }
 }
 

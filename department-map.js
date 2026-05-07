@@ -255,12 +255,8 @@ function startLoading() {
 
     window.setTimeout(() => {
       page.classList.add("is-ready");
-      loadingOverlay.classList.add("is-morph");
+      loadingOverlay.classList.add("is-done");
       startDepartmentReveal(700);
-
-      window.setTimeout(() => {
-        loadingOverlay.classList.add("is-done");
-      }, morphDuration);
     }, completeHold);
   }
 
