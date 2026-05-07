@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Orbitron:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="department-map.css?v=20260506-onboard-small-light">
+    <link rel="stylesheet" href="department-map.css?v=20260507-restricted-white">
   </head>
   <body>
     <div class="department-page">
@@ -91,21 +91,19 @@
       </aside>
 
       <div class="loading-overlay" data-loading>
-        <div class="loading-main">
-          <div class="loading-mark">
-            <div class="loading-shape-frame">
-              <div class="loading-complete-mask">
-                <img class="loading-pentagon-complete" src="assets/loading-pentagon-100.svg" alt="">
-              </div>
-              <div class="loading-fingerprint" aria-hidden="true">
-                <img src="assets/loading-fingerprint.png?v=20260505-loading-final" alt="">
-                <img class="loading-fingerprint-scan" src="assets/loading-fingerprint.png?v=20260505-loading-final" alt="">
-              </div>
-              <div class="loading-scan-line" aria-hidden="true"></div>
-            </div>
-            <p class="loading-percent"><span data-loading-percent>0</span>%</p>
+        <nav class="loading-face-nav" aria-hidden="true">
+          <img src="assets/subtract.svg" alt="">
+          <span>IONG</span>
+        </nav>
+        <div class="loading-scantrack" aria-hidden="true">
+          <div class="loading-scanrow">
+            <div class="loading-scanline"></div>
+            <p class="loading-face-percent"><span data-loading-percent>0</span>%</p>
             <p class="loading-verified">Verified</p>
           </div>
+        </div>
+        <div class="loading-figure" aria-hidden="true">
+          <img src="assets/loading-face-figure.png" alt="">
         </div>
       </div>
 
@@ -133,6 +131,6 @@
     </div>
 
     <script src="cursor-glow.js?v=20260506-onboard-hover-target"></script>
-    <script src="department-map.js?v=20260506-onboard-click-zone"></script>
+    <script src="department-map.js?v=20260507-face-scan"></script>
   </body>
 </html>

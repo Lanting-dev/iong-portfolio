@@ -232,7 +232,7 @@ function prepareLoadingMorph() {
 }
 
 function startLoading() {
-  const duration = 5000;
+  const duration = 8000;
   const completeHold = 620;
   const morphDuration = 980;
   const start = performance.now();
@@ -243,10 +243,8 @@ function startLoading() {
     const progress = Math.min(1, (now - start) / duration);
     const eased = 1 - Math.pow(1 - progress, 3);
     const percent = Math.round(eased * 100);
-    const shapeHeight = loadingOverlay.querySelector(".loading-shape-frame").getBoundingClientRect().height;
 
     loadingOverlay.style.setProperty("--loading-progress", percent);
-    loadingOverlay.style.setProperty("--loading-shape-height", `${shapeHeight}px`);
     loadingPercent.textContent = String(percent);
     loadingOverlay.classList.toggle("is-verified", percent >= 100);
 
@@ -256,7 +254,6 @@ function startLoading() {
     }
 
     window.setTimeout(() => {
-      prepareLoadingMorph();
       page.classList.add("is-ready");
       loadingOverlay.classList.add("is-morph");
       startDepartmentReveal(700);

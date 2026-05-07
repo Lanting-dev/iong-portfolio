@@ -3,25 +3,19 @@ const departments = {
     label: "METE SYSTEMS",
     code: "MS-001",
     color: "#2a8a7a",
-    subtitle: "Assigned through sustained nutritional systems engagement.",
-    titleSize: "24px",
-    titleSpacing: "3px"
+    subtitle: "Assigned through sustained nutritional systems engagement."
   },
   hael: {
     label: "HÆL INTELLIGENCE",
     code: "HI-003",
     color: "#6aa6ff",
-    subtitle: "Assigned through sustained biometric intelligence engagement.",
-    titleSize: "20px",
-    titleSpacing: "2px"
+    subtitle: "Assigned through sustained biometric intelligence engagement."
   },
   wel: {
     label: "WĒL OUTREACH",
     code: "WO-002",
     color: "#e8eaeb",
-    subtitle: "Assigned through sustained outreach and flow engagement.",
-    titleSize: "23px",
-    titleSpacing: "2.6px"
+    subtitle: "Assigned through sustained outreach and flow engagement."
   }
 };
 
@@ -70,7 +64,5 @@ const assigned = getAssignedDepartment();
 const department = departments[assigned] || departments.mete;
 
 document.documentElement.style.setProperty("--assigned", department.color);
-document.documentElement.style.setProperty("--badge-title-size", department.titleSize);
-document.documentElement.style.setProperty("--badge-title-spacing", department.titleSpacing);
 document.documentElement.dataset.assignedDepartment = assigned;
 document.querySelector("[data-assigned-label]").textContent = department.label;

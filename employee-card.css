@@ -51,7 +51,7 @@ img {
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 48px;
+  gap: 24px;
   color: var(--secondary);
   text-decoration: none;
 }
@@ -120,9 +120,10 @@ img {
 }
 
 .employee-card {
+  container-type: inline-size;
   position: relative;
-  width: min(462px, calc(100vw - 72px), calc((100vh - 210px) * 0.5943));
-  aspect-ratio: 462 / 696;
+  width: min(380px, calc(100vw - 72px), calc((100vh - 210px) * 0.5278));
+  aspect-ratio: 462 / 720;
   overflow: hidden;
   border: 0;
   border-radius: 15px;
@@ -160,7 +161,7 @@ img {
   width: 100%;
   height: 100%;
   max-width: none;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .badge-media {
@@ -186,18 +187,18 @@ img {
 .badge-photo {
   position: relative;
   width: 100%;
-  aspect-ratio: 382 / 221;
-  margin-top: 0;
+  aspect-ratio: 382 / 213.145;
+  margin-top: 24px;
   overflow: hidden;
   border-radius: 4px;
 }
 
 .badge-photo img {
   position: absolute;
-  left: -0.43%;
-  top: -42.56%;
-  width: 100.87%;
-  height: 191.89%;
+  left: 0;
+  top: -46.51%;
+  width: 100%;
+  height: 196.7%;
   max-width: none;
   object-fit: cover;
 }
@@ -205,34 +206,42 @@ img {
 .badge-details {
   position: absolute;
   left: 50%;
-  top: 67.8%;
+  top: 70%;
   width: 82.68%;
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  gap: 8.4cqw;
   transform: translateX(-50%);
 }
 
 .badge-assignment {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 4.2cqw;
+}
+
+.badge-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8.4cqw;
 }
 
 .badge-access {
   color: #000000;
-  font-size: 16px;
+  font-family: Orbitron, sans-serif;
+  font-size: 4.2cqw;
+  font-weight: 400;
   letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .badge-assignment h1 {
   color: #000000;
-  font-size: var(--badge-title-size, 24px);
+  font-family: Orbitron, sans-serif;
+  font-size: 5.3cqw;
   font-weight: 500;
-  letter-spacing: var(--badge-title-spacing, 3px);
-  overflow: hidden;
-  text-overflow: clip;
-  white-space: nowrap;
+  letter-spacing: 3px;
+  text-transform: uppercase;
 }
 
 .badge-divider {
@@ -245,19 +254,21 @@ img {
 .badge-employee {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 1.1cqw;
 }
 
 .badge-employee p {
   color: #000000;
-  font-size: 16px;
+  font-family: Orbitron, sans-serif;
+  font-size: 4.2cqw;
+  font-weight: 400;
   letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .badge-employee span {
   color: var(--primary);
-  font-size: 10px;
-  line-height: 1;
+  font-size: 2.6cqw;
 }
 
 @keyframes employee-title-enter {
@@ -284,14 +295,4 @@ img {
     width: min(320px, calc(100vw - 56px));
   }
 
-  .badge-access,
-  .badge-employee p {
-    font-size: 11px;
-    letter-spacing: 1.4px;
-  }
-
-  .badge-assignment h1 {
-    font-size: 17px;
-    letter-spacing: 2px;
-  }
 }
