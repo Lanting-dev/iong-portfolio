@@ -172,7 +172,7 @@ img {
   bottom: 0;
   left: 0;
   right: 0;
-  height: min(555px, 55vh);
+  height: min(460px, 44vh);
   z-index: 1;
   pointer-events: none;
 }
@@ -189,9 +189,13 @@ img {
   position: absolute;
   left: 0;
   right: 0;
-  top: 46%;
+  top: 28vh;
   z-index: 2;
   transition: opacity 300ms ease;
+}
+
+.loading-overlay.is-verified .loading-scanrow {
+  animation-play-state: paused;
 }
 
 .loading-overlay.is-morph .loading-scantrack {
@@ -201,12 +205,9 @@ img {
 .loading-scanrow {
   position: relative;
   height: 24px;
-  animation: face-scan-sweep 3s ease-in-out infinite alternate;
+  animation: face-scan-sweep 3.2s ease-in-out infinite alternate;
 }
 
-.loading-overlay.is-verified .loading-scanrow {
-  animation-play-state: paused;
-}
 
 .loading-scanline {
   position: absolute;
@@ -923,11 +924,11 @@ img {
 
 @keyframes face-scan-sweep {
   from {
-    transform: translateY(-80px);
+    transform: translateY(0);
   }
 
   to {
-    transform: translateY(80px);
+    transform: translateY(24vh);
   }
 }
 
