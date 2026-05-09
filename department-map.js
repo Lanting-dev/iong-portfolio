@@ -678,7 +678,7 @@ function initNodesCanvas() {
     });
 
     const FADE_IN_DUR = 1200;
-    const DRIFT_DUR   = 1500;
+    const DRIFT_DUR   = 5500;
     const CONV_DUR    = 900;
     const MOVE_DUR    = 600;
     const CONV_START  = FADE_IN_DUR + DRIFT_DUR;
@@ -738,7 +738,7 @@ function initNodesCanvas() {
           convSnap = getNodePts(t);
         }
 
-        const trailKeep = lp(0.88, 0.65, convEase);
+        const trailKeep = lp(0.75, 0.52, convEase);
         ctx.globalCompositeOperation = "destination-in";
         ctx.fillStyle = `rgba(0,0,0,${trailKeep.toFixed(3)})`;
         ctx.fillRect(0, 0, W, H);
@@ -781,7 +781,7 @@ function initNodesCanvas() {
       } else {
         // FADE_IN + DRIFT: generative node motion with trail
         ctx.globalCompositeOperation = "destination-in";
-        ctx.fillStyle = "rgba(0,0,0,0.88)";
+        ctx.fillStyle = "rgba(0,0,0,0.75)";
         ctx.fillRect(0, 0, W, H);
         ctx.globalCompositeOperation = "source-over";
         drawGenNodes(getNodePts(t), B * fadeAlpha);

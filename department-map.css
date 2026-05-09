@@ -45,6 +45,12 @@ img {
   align-items: center;
   justify-content: center;
   padding: 48px clamp(24px, 4.17vw, 80px);
+  transition: opacity 400ms ease;
+}
+
+.department-page:has([data-loading]:not(.is-done)) .dept-nav {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .dept-logo {
@@ -142,15 +148,7 @@ img {
 }
 
 .loading-face-nav {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 4;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  padding: 48px 0;
+  display: none;
 }
 
 .loading-face-nav img {
