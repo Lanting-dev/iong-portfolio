@@ -48,21 +48,9 @@
           </button>
           <button class="dept-label dept-lic" data-dept="lic" type="button">
             <span data-type-dept="lic">LÍC ANALYTICS</span><span class="cursor is-hidden" data-cursor="lic">|</span>
-            <span class="dept-hover-preview dept-hover-lock" aria-hidden="true">
-              <span class="dept-lock-icon">
-                <img class="dept-lock-body" src="assets/lock-body.svg" alt="">
-                <img class="dept-lock-keyhole" src="assets/lock-keyhole.svg" alt="">
-              </span>
-            </span>
           </button>
           <button class="dept-label dept-lif" data-dept="lif" type="button">
             <span data-type-dept="lif">LIF CONTINUITY</span><span class="cursor is-hidden" data-cursor="lif">|</span>
-            <span class="dept-hover-preview dept-hover-lock" aria-hidden="true">
-              <span class="dept-lock-icon">
-                <img class="dept-lock-body" src="assets/lock-body.svg" alt="">
-                <img class="dept-lock-keyhole" src="assets/lock-keyhole.svg" alt="">
-              </span>
-            </span>
           </button>
           <button class="dept-label dept-hael" data-dept="hael" type="button">
             <span data-type-dept="hael">HÆL INTELLIGENCE</span><span class="cursor is-hidden" data-cursor="hael">|</span>
@@ -88,9 +76,14 @@
         <p class="department-detail-copy" data-detail-copy>
           Mete Systems collects and processes nutritional materials into daily sachets. It reduces waste and meets safety standards. The exact composition is not shared, and most processes are not visible to the public.
         </p>
+        <div class="department-detail-restricted-copy" data-detail-restricted-copy hidden>
+          <p class="department-detail-restricted-heading">Access restricted</p>
+          <p class="department-detail-restricted-body">Your clearance level does not permit access to this section.</p>
+        </div>
       </aside>
 
       <div class="loading-overlay" data-loading>
+        <canvas class="nodes-canvas" data-nodes-canvas aria-hidden="true"></canvas>
         <nav class="loading-face-nav" aria-hidden="true">
           <img src="assets/subtract.svg" alt="">
           <span>IONG</span>

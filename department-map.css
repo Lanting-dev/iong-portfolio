@@ -146,7 +146,7 @@ img {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 3;
+  z-index: 4;
   display: flex;
   align-items: center;
   gap: 24px;
@@ -190,19 +190,13 @@ img {
   left: 0;
   right: 0;
   top: 20vh;
-  z-index: 2;
+  z-index: 3;
   transition: opacity 300ms ease;
 }
-
-.loading-overlay.is-verified .loading-scanrow {
-  animation-play-state: paused;
-}
-
 
 .loading-scanrow {
   position: relative;
   height: 24px;
-  animation: face-scan-sweep 3.2s ease-in-out infinite alternate;
 }
 
 
@@ -248,6 +242,19 @@ img {
 
 .loading-overlay.is-verified .loading-verified {
   opacity: 1;
+}
+
+.nodes-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.nodes-canvas.is-morphing {
+  transform: scale(var(--nodes-final-scale, 0.3));
 }
 
 .pentagon-map {
@@ -611,6 +618,20 @@ img {
   --detail-y: -50%;
 }
 
+.department-detail-overlay.is-from-lic {
+  --detail-left: calc(50% + min(28vw, 360px));
+  --detail-top: 76%;
+  --detail-x: -50%;
+  --detail-y: -100%;
+}
+
+.department-detail-overlay.is-from-lif {
+  --detail-left: calc(50% - min(28vw, 360px));
+  --detail-top: 76%;
+  --detail-x: -50%;
+  --detail-y: -100%;
+}
+
 .department-detail-heading {
   position: absolute;
   left: 55px;
@@ -649,7 +670,7 @@ img {
   height: 403px;
 }
 
-.department-detail-media img {
+.department-detail-media > img {
   width: 100%;
   height: 100%;
   max-width: none;
@@ -659,6 +680,7 @@ img {
 .department-detail-media > img[hidden] {
   display: none;
 }
+
 
 .department-detail-media.is-mete {
   left: 55px;
@@ -699,11 +721,11 @@ img {
 }
 
 .department-detail-media.is-locked {
-  left: 70px;
-  top: 140px;
-  width: 166px;
-  height: 166px;
-  border: 1px solid rgba(42, 138, 122, 0.38);
+  left: 55px;
+  top: 115px;
+  width: 160px;
+  height: 208px;
+  overflow: hidden;
   border-radius: 4px;
 }
 
@@ -749,6 +771,39 @@ img {
   line-height: 1.18;
   letter-spacing: 0;
   transform: none;
+}
+
+.department-detail-restricted-copy {
+  position: absolute;
+  left: 258px;
+  top: 50%;
+  width: 321px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  transform: translateY(calc(-50% + 18px));
+}
+
+.department-detail-restricted-copy[hidden] {
+  display: none;
+}
+
+.department-detail-restricted-heading,
+.department-detail-restricted-body {
+  margin: 0;
+  color: var(--secondary);
+  line-height: 1;
+}
+
+.department-detail-restricted-heading {
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+
+.department-detail-restricted-body {
+  font-size: 14px;
+  letter-spacing: 0;
+  line-height: 1.18;
 }
 
 .restricted-overlay {

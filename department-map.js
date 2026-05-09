@@ -25,6 +25,7 @@ const departments = {
     subtitle: "Data processing",
     description:
       "Líc Analytics processes classified behavioral, nutritional, and biometric datasets. Public access is restricted and operational details are only visible at elevated clearance levels.",
+    image: "assets/department-overlay-lic.png",
     imageClass: "is-locked"
   },
   lif: {
@@ -33,6 +34,7 @@ const departments = {
     subtitle: "Population monitoring",
     description:
       "Lif Continuity monitors long-term population stability through restricted forecasting systems. Access requires authorization beyond employee-level browsing.",
+    image: "assets/department-overlay-lif.png",
     imageClass: "is-locked"
   },
   hael: {
@@ -75,9 +77,12 @@ const detailCopy = document.querySelector("[data-detail-copy]");
 const detailImage = document.querySelector("[data-detail-image]");
 const detailMedia = document.querySelector("[data-detail-media]");
 const detailLock = document.querySelector("[data-detail-lock]");
+const detailRestrictedCopy = document.querySelector("[data-detail-restricted-copy]");
 const onboardBadge = document.querySelector("[data-onboard-badge]");
 let departmentDetailCloseTimer = null;
 let activePanelDepartment = null;
+let sharedLoadProgress = 0;
+let sharedLoadLinear = 0;
 let activePanelStartedAt = 0;
 const departmentLabelHoverTimers = new WeakMap();
 let activeHoverLabel = null;
@@ -232,32 +237,94 @@ function prepareLoadingMorph() {
 }
 
 function startLoading() {
-  const duration = 8000;
-  const completeHold = 620;
-  const morphDuration = 980;
+  const duration     = 6000;
+  const verifiedHold = 600;
   const start = performance.now();
   markLoadingSeen();
   loadingOverlay.classList.remove("is-verified");
+
+  const scanElems = [
+    loadingOverlay.querySelector(".loading-face-nav"),
+    loadingOverlay.querySelector(".loading-scantrack"),
+    loadingOverlay.querySelector(".loading-figure"),
+  ].filter(Boolean);
+  scanElems.forEach(el => { el.style.opacity = ""; });
+
+  const scanrow = loadingOverlay.querySelector(".loading-scanrow");
+  const SCAN_PERIOD   = 6400;
+  const SCAN_RANGE    = 40;
+  const SCAN_TARGET   = 25;
+  const SETTLE_DUR    = 480;
+
+  let scanPhase    = "sweeping";
+  let currentScanY = 0;
+  let settleStart  = null;
+  let settleFrom   = 0;
+
+  function scanTick(t) {
+    if (scanPhase === "sweeping") {
+      const phase = (t % SCAN_PERIOD) / SCAN_PERIOD;
+      currentScanY = SCAN_RANGE * 0.5 * (1 - Math.cos(phase * Math.PI * 2));
+      if (scanrow) scanrow.style.transform = `translateY(${currentScanY.toFixed(2)}vh)`;
+      requestAnimationFrame(scanTick);
+    } else if (scanPhase === "settling") {
+      if (!settleStart) { settleFrom = currentScanY; settleStart = t; }
+      const p = Math.min(1, (t - settleStart) / SETTLE_DUR);
+      const ease = 1 - Math.pow(1 - p, 3);
+      const y = settleFrom + (SCAN_TARGET - settleFrom) * ease;
+      if (scanrow) scanrow.style.transform = `translateY(${y.toFixed(2)}vh)`;
+      currentScanY = y;
+      if (p < 1) requestAnimationFrame(scanTick);
+      else scanPhase = "done";
+    }
+  }
+  requestAnimationFrame(scanTick);
 
   function update(now) {
     const progress = Math.min(1, (now - start) / duration);
     const eased = 1 - Math.pow(1 - progress, 3);
     const percent = Math.round(eased * 100);
 
+    sharedLoadProgress = eased;
+    sharedLoadLinear = progress;
     loadingOverlay.style.setProperty("--loading-progress", percent);
     loadingPercent.textContent = String(percent);
-    loadingOverlay.classList.toggle("is-verified", percent >= 100);
 
     if (progress < 1) {
       requestAnimationFrame(update);
       return;
     }
 
+    scanPhase = "settling";
+    loadingOverlay.classList.add("is-verified");
+
     window.setTimeout(() => {
-      page.classList.add("is-ready");
-      loadingOverlay.classList.add("is-done");
-      startDepartmentReveal(700);
-    }, completeHold);
+      let fadeStart = null;
+      const FADE_DUR = 400;
+
+      function fadeOut(t) {
+        if (!fadeStart) fadeStart = t;
+        const p = Math.min(1, (t - fadeStart) / FADE_DUR);
+        const opacity = Math.pow(1 - p, 2);
+        scanElems.forEach(el => { el.style.opacity = opacity.toFixed(3); });
+
+        if (p < 1) {
+          requestAnimationFrame(fadeOut);
+          return;
+        }
+
+        const onMorphDone = () => {
+          page.classList.add("is-ready");
+          loadingOverlay.classList.add("is-done");
+          startDepartmentReveal(700);
+        };
+        const morph = initNodesCanvas();
+        if (morph) morph(onMorphDone);
+        else onMorphDone();
+      }
+
+      requestAnimationFrame(fadeOut);
+    }, verifiedHold);
   }
 
   requestAnimationFrame(update);
@@ -279,18 +346,23 @@ function openDepartmentDetail(department) {
   detailSubtitle.textContent = department.subtitle || "Department overview";
   detailCopy.textContent = department.description || "";
   detailMedia.className = `department-detail-media ${department.imageClass || ""}`;
-  departmentDetail.classList.remove("is-from-mete", "is-from-wel", "is-from-hael");
+  departmentDetail.classList.remove("is-from-mete", "is-from-wel", "is-from-hael", "is-from-lic", "is-from-lif");
   if (department.id) {
     departmentDetail.classList.add(`is-from-${department.id}`);
   }
 
   if (department.restricted) {
-    detailImage.hidden = true;
-    detailLock.hidden = false;
+    detailImage.hidden = false;
+    detailImage.src = department.image;
+    detailLock.hidden = true;
+    detailCopy.hidden = true;
+    detailRestrictedCopy.hidden = false;
   } else {
     detailImage.hidden = false;
     detailLock.hidden = true;
     detailImage.src = department.image;
+    detailCopy.hidden = false;
+    detailRestrictedCopy.hidden = true;
   }
 
   departmentDetail.classList.add("is-open");
@@ -344,10 +416,6 @@ document.querySelectorAll("[data-dept]").forEach((button) => {
     const id = button.dataset.dept;
     const department = departments[id];
     if (!button.classList.contains("is-ready")) return;
-    if (department.restricted) {
-      closeDepartmentDetail();
-      return;
-    }
     openDepartmentDetail({ ...department, id });
   }
 
@@ -410,7 +478,7 @@ function syncDepartmentHoverFromPoint(x, y) {
     activeHoverLabel.classList.add("is-hovered");
     const id = activeHoverLabel.dataset.dept;
     const department = departments[id];
-    if (department && !department.restricted) {
+    if (department) {
       window.clearTimeout(departmentDetailCloseTimer);
       openDepartmentDetail({ ...department, id });
     }
@@ -495,3 +563,234 @@ window.addEventListener("beforeunload", () => {
   stopDepartmentPanelTimer();
   timers.forEach(clearTimeout);
 });
+
+function initNodesCanvas() {
+  const canvas = document.querySelector("[data-nodes-canvas]");
+  if (!canvas) return null;
+
+  const ctx = canvas.getContext("2d");
+  const TAU = Math.PI * 2;
+  const N = 5;
+  let W, H;
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth || window.innerWidth;
+    H = canvas.height = canvas.offsetHeight || window.innerHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  const spread = Math.min(window.innerWidth, window.innerHeight);
+  const amp = spread * 0.28;
+  const r1  = spread * 0.36;
+  const CY  = 0.45;
+  const B   = 0.80;
+
+  function eo3(t) { return 1 - Math.pow(1 - t, 3); }
+  function lp(a, b, t) { return a + (b - a) * t; }
+
+  function makeNode(a) {
+    return {
+      ax: a * (0.6 + Math.random() * 0.8), ax2: a * (0.2 + Math.random() * 0.3),
+      ay: a * (0.6 + Math.random() * 0.8), ay2: a * (0.2 + Math.random() * 0.3),
+      az: a * (0.5 + Math.random() * 0.7),
+      fx: TAU / (18000 + Math.random() * 16000), fx2: TAU / (7000 + Math.random() * 8000),
+      fy: TAU / (18000 + Math.random() * 16000), fy2: TAU / (7000 + Math.random() * 8000),
+      fz: TAU / (14000 + Math.random() * 12000),
+      px: Math.random() * TAU, px2: Math.random() * TAU,
+      py: Math.random() * TAU, py2: Math.random() * TAU,
+      pz: Math.random() * TAU,
+      rotFreq: 0.000022 + Math.random() * 0.000020,
+      rotPhase: Math.random() * TAU,
+    };
+  }
+
+  const mainNodes = Array.from({ length: N }, () => makeNode(amp));
+
+  function nodePos(node, t) {
+    return [
+      Math.sin(t * node.fx  + node.px)  * node.ax  + Math.sin(t * node.fx2 + node.px2) * node.ax2,
+      Math.sin(t * node.fy  + node.py)  * node.ay  + Math.sin(t * node.fy2 + node.py2) * node.ay2,
+      Math.sin(t * node.fz  + node.pz)  * node.az,
+    ];
+  }
+
+  function rotXY(pts, rx, ry) {
+    return pts
+      .map(([x, y, z]) => [x, y * Math.cos(rx) - z * Math.sin(rx), y * Math.sin(rx) + z * Math.cos(rx)])
+      .map(([x, y, z]) => [x * Math.cos(ry) + z * Math.sin(ry), y, -x * Math.sin(ry) + z * Math.cos(ry)]);
+  }
+
+  function proj([x, y, z]) {
+    const fov = 900, s = fov / (z + fov);
+    return [x * s + W / 2, y * s + H * CY, s];
+  }
+
+  function getNodePts(t) {
+    return mainNodes.map((n) => {
+      const rx = Math.sin(t * n.rotFreq * 0.7 + n.rotPhase) * 0.22;
+      const ry = Math.sin(t * n.rotFreq       + n.rotPhase) * 0.30;
+      return rotXY([nodePos(n, t)], rx, ry).map(proj)[0];
+    });
+  }
+
+  function drawGenNodes(pts, b) {
+    for (let i = 0; i < N; i++) {
+      for (let j = i + 1; j < N; j++) {
+        const [x1, y1, s1] = pts[i];
+        const [x2, y2, s2] = pts[j];
+        const dist = Math.hypot(x2 - x1, y2 - y1);
+        const fade = Math.max(0, 1 - dist / (spread * 0.90));
+        if (fade < 0.04) continue;
+        const s = (s1 + s2) / 2;
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+        ctx.strokeStyle = `rgba(255,255,255,${(b * s * fade * 0.9).toFixed(3)})`;
+        ctx.lineWidth = s * fade * 0.65;
+        ctx.stroke();
+      }
+    }
+    pts.forEach(([x, y, s]) => {
+      ctx.beginPath(); ctx.arc(x, y, 5.5 * s, 0, TAU);
+      ctx.strokeStyle = `rgba(255,255,255,${(b * s * 0.75).toFixed(3)})`;
+      ctx.lineWidth = s * 0.55; ctx.stroke();
+      ctx.beginPath(); ctx.arc(x, y, 2 * s, 0, TAU);
+      ctx.fillStyle = `rgba(255,255,255,${(b * s).toFixed(3)})`; ctx.fill();
+    });
+  }
+
+  // Canvas stays dark during Phase 1 (scan). morph() starts Phase 2.
+  return function morph(done) {
+    const cy = H * CY;
+
+    const svgEl = document.querySelector(".pentagon-map");
+    let mapR  = r1 * 0.28;
+    let mapCY = cy;
+    if (svgEl) {
+      const svgRect = svgEl.getBoundingClientRect();
+      mapR  = 140 * (svgRect.width / 900);
+      mapCY = svgRect.top + (310 / 620) * svgRect.height;
+    }
+
+    // Pentagon vertex 2D positions for convergence target
+    const pentPts2D = Array.from({ length: N }, (_, i) => {
+      const a = (i / N) * TAU - TAU / 4;
+      return [W / 2 + Math.cos(a) * r1, cy + Math.sin(a) * r1];
+    });
+
+    const FADE_IN_DUR = 1200;
+    const DRIFT_DUR   = 1500;
+    const CONV_DUR    = 900;
+    const MOVE_DUR    = 600;
+    const CONV_START  = FADE_IN_DUR + DRIFT_DUR;
+    const MOVE_START  = CONV_START + CONV_DUR;
+
+    let morphStart    = null;
+    let convSnap      = null;
+    let callbackFired = false;
+
+    function morphTick(t) {
+      if (!morphStart) morphStart = t;
+      const elapsed = t - morphStart;
+
+      const fadeAlpha = eo3(Math.min(1, elapsed / FADE_IN_DUR));
+      const convT     = Math.min(1, Math.max(0, (elapsed - CONV_START) / CONV_DUR));
+      const convEase  = eo3(convT);
+      const moveT     = Math.min(1, Math.max(0, (elapsed - MOVE_START) / MOVE_DUR));
+      const moveEase  = eo3(moveT);
+
+      if (moveT > 0) {
+        // MOVE: clean pentagon scales down to map position at full brightness;
+        // the overlay's is-done CSS fade handles the final exit
+        ctx.clearRect(0, 0, W, H);
+        const curR  = lp(r1, mapR, moveEase);
+        const curCY = lp(cy, mapCY, moveEase);
+        const b     = B;
+
+        if (b > 0.01) {
+          for (let i = 0; i < N; i++) {
+            const j  = (i + 1) % N;
+            const ai = (i / N) * TAU - TAU / 4;
+            const aj = (j / N) * TAU - TAU / 4;
+            ctx.beginPath();
+            ctx.moveTo(W / 2 + Math.cos(ai) * curR, curCY + Math.sin(ai) * curR);
+            ctx.lineTo(W / 2 + Math.cos(aj) * curR, curCY + Math.sin(aj) * curR);
+            ctx.strokeStyle = `rgba(255,255,255,${(b * 0.9).toFixed(3)})`;
+            ctx.lineWidth = 1.0;
+            ctx.stroke();
+          }
+          for (let i = 0; i < N; i++) {
+            const a = (i / N) * TAU - TAU / 4;
+            ctx.beginPath();
+            ctx.arc(W / 2 + Math.cos(a) * curR, curCY + Math.sin(a) * curR, 2.5, 0, TAU);
+            ctx.fillStyle = `rgba(255,255,255,${b.toFixed(3)})`;
+            ctx.fill();
+          }
+        }
+
+        if (moveT >= 1) {
+          if (!callbackFired) { callbackFired = true; if (done) done(); }
+          return;
+        }
+      } else if (convT > 0) {
+        // CONV: continue trail fade (no clearRect flash), lerp toward pentagon vertices,
+        // fade diagonals + rings so CONV end already looks like clean pentagon
+        if (!convSnap) {
+          convSnap = getNodePts(t);
+        }
+
+        const trailKeep = lp(0.88, 0.65, convEase);
+        ctx.globalCompositeOperation = "destination-in";
+        ctx.fillStyle = `rgba(0,0,0,${trailKeep.toFixed(3)})`;
+        ctx.fillRect(0, 0, W, H);
+        ctx.globalCompositeOperation = "source-over";
+
+        const b        = B * fadeAlpha;
+        const starFade = 1 - convEase;
+        const ringFade = 1 - convEase;
+
+        for (let i = 0; i < N; i++) {
+          for (let j = i + 1; j < N; j++) {
+            const diff    = j - i;
+            const isEdge  = diff === 1 || diff === N - 1;
+            const connAlpha = isEdge ? 1.0 : starFade;
+            if (connAlpha < 0.01) continue;
+            const x1 = lp(convSnap[i][0], pentPts2D[i][0], convEase);
+            const y1 = lp(convSnap[i][1], pentPts2D[i][1], convEase);
+            const x2 = lp(convSnap[j][0], pentPts2D[j][0], convEase);
+            const y2 = lp(convSnap[j][1], pentPts2D[j][1], convEase);
+            const dist = Math.hypot(x2 - x1, y2 - y1);
+            const fade = Math.max(0, 1 - dist / (spread * 0.90)) * connAlpha;
+            if (fade < 0.04) continue;
+            ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+            ctx.strokeStyle = `rgba(255,255,255,${(b * fade * 0.9).toFixed(3)})`;
+            ctx.lineWidth = fade * 0.65;
+            ctx.stroke();
+          }
+        }
+        for (let i = 0; i < N; i++) {
+          const x = lp(convSnap[i][0], pentPts2D[i][0], convEase);
+          const y = lp(convSnap[i][1], pentPts2D[i][1], convEase);
+          if (ringFade > 0.02) {
+            ctx.beginPath(); ctx.arc(x, y, 5.5, 0, TAU);
+            ctx.strokeStyle = `rgba(255,255,255,${(b * 0.75 * ringFade).toFixed(3)})`;
+            ctx.lineWidth = 0.55; ctx.stroke();
+          }
+          ctx.beginPath(); ctx.arc(x, y, 2, 0, TAU);
+          ctx.fillStyle = `rgba(255,255,255,${b.toFixed(3)})`; ctx.fill();
+        }
+      } else {
+        // FADE_IN + DRIFT: generative node motion with trail
+        ctx.globalCompositeOperation = "destination-in";
+        ctx.fillStyle = "rgba(0,0,0,0.88)";
+        ctx.fillRect(0, 0, W, H);
+        ctx.globalCompositeOperation = "source-over";
+        drawGenNodes(getNodePts(t), B * fadeAlpha);
+      }
+
+      requestAnimationFrame(morphTick);
+    }
+
+    requestAnimationFrame(morphTick);
+  };
+}
+

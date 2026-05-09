@@ -357,16 +357,18 @@ img {
 }
 
 .process-card.is-visible {
-  opacity: 1;
-  transform: translateY(0) scale(0.99);
+  opacity: 0.72;
+  transform: translateY(0) scale(1);
 }
 
 .process-card.is-active {
+  opacity: 1;
   border-color: var(--active-stroke);
   box-shadow:
     0 0 0 1px var(--active-stroke-soft),
-    0 0 34px var(--active-glow);
-  transform: translateY(-6px) scale(1.015);
+    0 0 52px var(--active-glow),
+    0 20px 56px rgba(0, 0, 0, 0.48);
+  transform: translateY(-12px) scale(1.02);
 }
 
 .process-card.is-active::after {
@@ -475,7 +477,7 @@ img {
   top: 50%;
   width: 125%;
   height: auto;
-  transform: translate(-50%, -48%) rotate(0.01deg);
+  transform: translate(-50%, calc(-48% + var(--parallax-offset, 0) * 55px)) rotate(0.01deg);
 }
 
 .recomposition-media img {
@@ -483,6 +485,7 @@ img {
   bottom: 18px;
   width: 430px;
   height: auto;
+  transform: translateY(calc(var(--parallax-offset, 0) * 55px));
 }
 
 .biometric-media img {
@@ -491,6 +494,7 @@ img {
   width: 184.87%;
   height: 88.77%;
   object-fit: cover;
+  transform: translateY(calc(var(--parallax-offset, 0) * 55px));
 }
 
 .delivery-media img {
@@ -498,7 +502,7 @@ img {
   top: 50%;
   width: 112%;
   height: auto;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-50% + var(--parallax-offset, 0) * 55px));
 }
 
 .citizen-node {
@@ -522,6 +526,8 @@ img {
 
 @media (prefers-reduced-motion: reduce) {
   .process-card,
+  .process-card.is-visible,
+  .process-card.is-active,
   .process-copy > *,
   .process-media,
   .process-node {

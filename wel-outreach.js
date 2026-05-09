@@ -88,7 +88,21 @@ function setupStepReveal() {
   });
 }
 
-window.addEventListener("scroll", updateFlowCurrent, { passive: true });
-window.addEventListener("resize", updateFlowCurrent);
+function updateParallax() {
+  const vh = window.innerHeight;
+  processCards.forEach((card) => {
+    const rect = card.getBoundingClientRect();
+    const offset = clamp((rect.top + rect.height / 2 - vh / 2) / vh, -0.6, 0.6);
+    card.style.setProperty("--parallax-offset", offset.toFixed(4));
+  });
+}
+
+function updateFrame() {
+  updateFlowCurrent();
+  updateParallax();
+}
+
+window.addEventListener("scroll", updateFrame, { passive: true });
+window.addEventListener("resize", updateFrame);
 setupStepReveal();
-updateFlowCurrent();
+updateFrame();
